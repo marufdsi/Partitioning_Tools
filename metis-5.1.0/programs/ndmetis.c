@@ -14,14 +14,15 @@
 
 #include "metisbin.h"
 
-
+#include <stdio.h>
+#include <string.h>
 
 /*************************************************************************/
 /*! Let the game begin! */
 /*************************************************************************/
 int main(int argc, char *argv[])
 {
-  idx_t options[METIS_NOPTIONS];
+  idx_t options[METIS_NOPTIONS], u, v;
   graph_t *graph;
   idx_t *perm, *iperm;
   params_t *params;
@@ -31,6 +32,27 @@ int main(int argc, char *argv[])
 
   gk_startcputimer(params->iotimer);
   graph = ReadGraph(params);
+  /* open file */
+  FILE *newMat;
+  char *ptr = strtok(params->filename, ".");
+  if ( !(newMat = fopen(strcat(ptr, ".mtx"), "w")) ) {
+    fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+    exit(EXIT_FAILURE);
+  }
+  fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
+
+  for (u = 0; u < graph->nvtxs; ++u) {
+    for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
+      fprintf(newMat, "%d %d %d\n", (u+1), (v+1), graph->adjwgt[v]);
+    }
+  }
+
+  /* close file */
+  if ( fclose(newMat) != 0) {
+    fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+    exit(EXIT_FAILURE);
+  }
+
   gk_stopcputimer(params->iotimer);
 
   /* This is just for internal use to clean up some files
