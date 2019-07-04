@@ -13,7 +13,8 @@
  */
 
 #include "metisbin.h"
-
+#include <stdio.h>
+#include <string.h>
 
 
 /*************************************************************************/
@@ -21,7 +22,7 @@
 /*************************************************************************/
 int main(int argc, char *argv[])
 {
-  idx_t i;
+  idx_t i, u, v;
   char *curptr, *newptr;
   idx_t options[METIS_NOPTIONS];
   graph_t *graph;
@@ -34,6 +35,28 @@ int main(int argc, char *argv[])
 
   gk_startcputimer(params->iotimer);
   graph = ReadGraph(params);
+
+  /* open file */
+  FILE *newMat;
+  char *ptr = strtok(params->filename, ".");
+  if ( !(newMat = fopen(strcat(ptr, ".mtx"), "w")) ) {
+    fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+    exit(EXIT_FAILURE);
+  }
+  fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
+
+  for (u = 0; u < graph->nvtxs; ++u) {
+    for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
+      fprintf(newMat, "%d %d %d\n", (u+1), (v+1), graph->adjwgt[v]);
+    }
+  }
+
+  /* close file */
+  if ( fclose(newMat) != 0) {
+    fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+    exit(EXIT_FAILURE);
+  }
+
 
   ReadTPwgts(params, graph->ncon);
   gk_stopcputimer(params->iotimer);
