@@ -120,7 +120,6 @@ graph_t *ReadGraph(params_t *params)
 
     while (1) {
       edge = strtoidx(curstr, &newstr, 10);
-      printf("Edge %d ", edge);
       if (newstr == curstr)
         break; /* End of line */
       curstr = newstr;
@@ -142,7 +141,6 @@ graph_t *ReadGraph(params_t *params)
       if (k == graph->nedges)
         errexit("There are more edges in the file than the %"PRIDX" specified.\n", 
             graph->nedges/2);
-      printf(" Edge Weight: %d \n", ewgt);
       adjncy[k] = edge-1;
       adjwgt[k] = ewgt;
       k++;
