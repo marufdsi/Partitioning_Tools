@@ -146,14 +146,21 @@ int main(int argc, char *argv[])
 
   /***** Convert graph into matrix in a sorting order of partition *****/
   /* open file */
-  FILE *newMat;
+  FILE *newMat, *nonSortMat;
   char *ptr = strtok(params->filename, ".");
+  char *nonsort_ptr = strtok(params->filename, ".");
   if ( !(newMat = fopen(strcat(ptr, ".mtx"), "w")) ) {
     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
     exit(EXIT_FAILURE);
   }
+  if ( !(nonSortMat = fopen(strcat(nonsort_ptr, "_original.mtx"), "w")) ) {
+    fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
+    exit(EXIT_FAILURE);
+  }
   fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
+  fprintf(nonSortMat, "%%%MatrixMarket matrix coordinate real general\n");
   fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
+  fprintf(nonSortMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
 
   for (u = 0; u < graph->nvtxs; ++u) {
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
@@ -162,9 +169,19 @@ int main(int argc, char *argv[])
     }
   }
 
+  for (u = 0; u < graph->nvtxs; ++u) {
+    for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
+      fprintf(nonSortMat, "%d %d %d\n", (u+1), (graph->adjncy[v]+1), graph->adjwgt[v]);
+    }
+  }
+
   /* close file */
   if ( fclose(newMat) != 0) {
     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+    exit(EXIT_FAILURE);
+  }
+  if ( fclose(nonSortMat) != 0) {
+    fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
     exit(EXIT_FAILURE);
   }
 
