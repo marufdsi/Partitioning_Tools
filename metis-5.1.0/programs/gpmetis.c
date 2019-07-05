@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
     exit(EXIT_FAILURE);
   }
-  fprintf(newMat, "%%MatrixMarket matrix coordinate real general");
+  fprintf(newMat, "%%MatrixMarket matrix coordinate real general\n");
   fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
 
   for (u = 0; u < graph->nvtxs; ++u) {
