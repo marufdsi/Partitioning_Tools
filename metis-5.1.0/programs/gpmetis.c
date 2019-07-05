@@ -140,9 +140,9 @@ int main(int argc, char *argv[])
       }
     }
   }
-  for (u = 0; u < graph->nvtxs; u++) {
+  /*for (u = 0; u < graph->nvtxs; u++) {
     printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
-  }
+  }*/
 
   /***** Convert graph into matrix in a sorting order of partition *****/
   /* open file */
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 
   for (u = 0; u < graph->nvtxs; ++u) {
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
-      printf("Original u:%d, v:%d, edwgt:%d\n", u, graph->adjncy[v], graph->adjwgt[v]);
+//      printf("Original u:%d, v:%d, edwgt:%d\n", u, graph->adjncy[v], graph->adjwgt[v]);
       fprintf(newMat, "%d %d %d\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), graph->adjwgt[v]);
     }
   }
