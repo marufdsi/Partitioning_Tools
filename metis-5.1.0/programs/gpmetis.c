@@ -133,8 +133,8 @@ int main(int argc, char *argv[])
   idx_t new_id = 0;
   idx_t *new_ids;
   new_ids = imalloc(graph->nvtxs, "main: part");
-  for (k_part = 0; k_part < nparts; ++k_part) {
-    for (u = 0; u < nvtxs; u++) {
+  for (k_part = 0; k_part < params->nparts; ++k_part) {
+    for (u = 0; u < graph->nvtxs; u++) {
       if(part[u] == k_part){
         new_ids[u] = new_id++;
       }
