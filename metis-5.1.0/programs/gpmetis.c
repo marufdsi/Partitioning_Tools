@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
   char *ptr = strtok(params->filename, ".");
 
   char mat_filename[MAXLINE];
-  sprintf(mat_filename, "%_%"PRIDX, ptr, params->nparts);
+  sprintf(mat_filename, "%s_%"PRIDX, ptr, params->nparts);
   if ( !(newMat = fopen(strcat(mat_filename, ".mtx"), "w")) ) {
     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
     exit(EXIT_FAILURE);
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 
   char *nonsort_ptr = strtok(params->filename, ".");
   char org_mat_filename[MAXLINE];
-  sprintf(org_mat_filename, "%_%"PRIDX, ptr, params->nparts);
+  sprintf(org_mat_filename, "%s_%"PRIDX, ptr, params->nparts);
   if ( !(nonSortMat = fopen(strcat(org_mat_filename, "_original.mtx"), "w")) ) {
     fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
     exit(EXIT_FAILURE);
