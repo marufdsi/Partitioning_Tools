@@ -148,8 +148,6 @@ int main(int argc, char *argv[])
   /* open file */
   FILE *newMat;
   char *ptr = strtok(params->filename, ".");
-  char *nonsort_ptr = strtok(params->filename, ".");
-
   if ( !(newMat = fopen(strcat(ptr, ".mtx"), "w")) ) {
     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
     exit(EXIT_FAILURE);
@@ -174,6 +172,7 @@ int main(int argc, char *argv[])
 
   FILE *nonSortMat;
 
+  char *nonsort_ptr = strtok(params->filename, ".");
   if ( !(nonSortMat = fopen(strcat(nonsort_ptr, "_original.mtx"), "w")) ) {
     fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
     exit(EXIT_FAILURE);
