@@ -140,6 +140,9 @@ int main(int argc, char *argv[])
       }
     }
   }
+  for (u = 0; u < graph->nvtxs; u++) {
+    printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
+  }
 
   /***** Convert graph into matrix in a sorting order of partition *****/
   /* open file */
