@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
   for (u = 0; u < graph->nvtxs; ++u) {
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
 //      printf("Original u:%d, v:%d, edwgt:%d\n", u, graph->adjncy[v], graph->adjwgt[v]);
-      fprintf(newMat, "%d %d %d\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), graph->adjwgt[v]);
+      fprintf(newMat, "%d %d %lf\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), (double)graph->adjwgt[v]);
     }
   }
 
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
   for (u = 0; u < graph->nvtxs; ++u) {
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
-      fprintf(nonSortMat, "%d %d %d\n", (u+1), (graph->adjncy[v]+1), graph->adjwgt[v]);
+      fprintf(nonSortMat, "%d %d %lf\n", (u+1), (graph->adjncy[v]+1), (double)graph->adjwgt[v]);
     }
   }
 
