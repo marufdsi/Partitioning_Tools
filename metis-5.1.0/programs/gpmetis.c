@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
   fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
 
 
-  for (itr = 0; itr < graph->nvtxs; ++itr) {
+  for (int itr = 0; itr < graph->nvtxs; ++itr) {
     u = sorted_vartex[itr];
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
       fprintf(newMat, "%d %d %lf\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), (double)graph->adjwgt[v]);
