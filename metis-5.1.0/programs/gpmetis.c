@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
   }
 
   /***** Label the vertices with the new ID according to the partition *****/
-  idx_t new_id = 0;
+  idx_t new_id = 0, itr = 0;
   idx_t *new_ids;
   new_ids = imalloc(graph->nvtxs, "main: part");
   sorted_vartex = imalloc(graph->nvtxs, "main: part");
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
   fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
 
 
-  for (int itr = 0; itr < graph->nvtxs; ++itr) {
+  for (itr = 0; itr < graph->nvtxs; ++itr) {
     u = sorted_vartex[itr];
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
       fprintf(newMat, "%d %d %lf\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), (double)graph->adjwgt[v]);
