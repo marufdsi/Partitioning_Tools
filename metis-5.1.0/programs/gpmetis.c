@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
   /***** Label the vertices with the new ID according to the partition *****/
   idx_t new_id = 0, itr = 0;
   idx_t *new_ids;
+  idx_t *sorted_vartex;
   new_ids = imalloc(graph->nvtxs, "main: part");
   sorted_vartex = imalloc(graph->nvtxs, "main: part");
   for (k_part = 0; k_part < params->nparts; ++k_part) {
