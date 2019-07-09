@@ -133,9 +133,11 @@ int main(int argc, char *argv[])
   idx_t new_id = 0;
   idx_t *new_ids;
   new_ids = imalloc(graph->nvtxs, "main: part");
+  sorted_vartex = imalloc(graph->nvtxs, "main: part");
   for (k_part = 0; k_part < params->nparts; ++k_part) {
     for (u = 0; u < graph->nvtxs; u++) {
       if(part[u] == k_part){
+        sorted_vartex[new_id] = u;
         new_ids[u] = new_id++;
       }
     }
@@ -160,9 +162,9 @@ int main(int argc, char *argv[])
   fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
 
 
-  for (u = 0; u < graph->nvtxs; ++u) {
+  for (itr = 0; itr < graph->nvtxs; ++itr) {
+    u = sorted_vartex[itr];
     for (v = graph->xadj[u]; v<graph->xadj[u+1]; v++) {
-//      printf("Original u:%d, v:%d, edwgt:%d\n", u, graph->adjncy[v], graph->adjwgt[v]);
       fprintf(newMat, "%d %d %lf\n", (new_ids[u]+1), (new_ids[graph->adjncy[v]]+1), (double)graph->adjwgt[v]);
     }
   }
