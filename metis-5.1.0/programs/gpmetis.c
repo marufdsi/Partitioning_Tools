@@ -133,8 +133,8 @@ int main(int argc, char *argv[]) {
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
     sorted_vartex = imalloc(graph->nvtxs, "main: part");
-    idx_t *nVartex_part = imalloc(graph->nparts, "main: part");
-    idx_t *nEdges_part = imalloc(graph->nparts, "main: part");
+    idx_t *nVartex_part = imalloc(params->nparts, "main: part");
+    idx_t *nEdges_part = imalloc(params->nparts, "main: part");
     for (k_part = 0; k_part < params->nparts; ++k_part) {
         int nVartex = 0;
         int nEdgesx = 0;
