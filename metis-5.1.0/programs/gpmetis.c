@@ -29,7 +29,7 @@ void swap_position (int *from, int *to)
 /*! Let the game begin! */
 /*************************************************************************/
 int main(int argc, char *argv[]) {
-    idx_t i, j, l, cl, u, v, k_part;
+    idx_t i, j, k, l, cl, u, v, k_part;
     char *curptr, *newptr;
     idx_t options[METIS_NOPTIONS];
     graph_t *graph;
