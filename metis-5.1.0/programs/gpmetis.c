@@ -15,7 +15,15 @@
 #include "metisbin.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
+// A utility function to swap to integers
+void swap_position (int *from, int *to)
+{
+    int temp = *from;
+    *from = *to;
+    *to = temp;
+}
 
 /*************************************************************************/
 /*! Let the game begin! */
@@ -127,8 +135,69 @@ int main(int argc, char *argv[]) {
         GPReportResults(params, graph, part, objval);
     }
 
-    /***** Label the vertices with the new ID according to the partition *****/
+    /***** Randomize Matrix ******/
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    for(u=0; u<graph->nvtxs; ++u){
+        random_vartex[u] = u;
+    }
+    srand ( time(NULL) );
+    for (i = graph->nvtxs-1; i > 0; i--) {
+        int j = rand() % (i+1);
+        // Swap arr[i] with the element at random index
+        swap_position(&random_vartex[i], &random_vartex[j]);
+    }
     idx_t new_id = 0, itr = 0;
+    idx_t * new_ids;
+    new_ids = imalloc(graph->nvtxs, "main: part");
+    idx_t *nVartex_part = imalloc(params->nparts, "main: part");
+    idx_t *nEdges_part = imalloc(params->nparts, "main: part");
+    int num_row = graph->nvtxs/params->nparts;
+    idx_t _part = 0, nVartex = 0, nEdgesx = 0, start = 0;
+    for (i = 0; i < graph->nvtxs; ++i) {
+        new_ids[random_vartex[i]] = new_id++;
+        nVartex++;
+        for (v = graph->xadj[random_vartex[i]]; v < graph->xadj[random_vartex[i] + 1]; v++) {
+            nEdgesx++;
+        }
+        idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
+        if((i+1) >= condition) {
+            nVartex_part[_part] = nVartex;
+            nEdges_part[_part] = nEdgesx;
+            nVartex = 0;
+            nEdgesx = 0;
+
+            FILE *newMat;
+            char *ptr = strtok(params->filename, ".");
+
+            char mat_filename[MAXLINE];
+            sprintf(mat_filename, "%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
+            if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
+                fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+                exit(EXIT_FAILURE);
+            }
+            fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
+            fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdgesx);
+
+            for (itr = start; itr <= i; ++itr) {
+                u = random_vartex[itr];
+                for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
+                    fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1), (double) graph->adjwgt[v]);
+                }
+            }
+
+            /* close file */
+            if (fclose(newMat) != 0) {
+                fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
+                exit(EXIT_FAILURE);
+            }
+            start = i + 1;
+            _part++;
+        }
+    }
+
+    /******* End ******/
+    /***** Label the vertices with the new ID according to the partition *****/
+    /*idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
@@ -150,14 +219,14 @@ int main(int argc, char *argv[]) {
         }
         nVartex_part[k_part] = nVartex;
         nEdges_part[k_part] = nEdgesx;
-    }
+    }*/
     /*for (u = 0; u < graph->nvtxs; u++) {
       printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
     }*/
 
     /***** Convert graph into matrix in a sorting order of partition *****/
-    for (k_part = 0; k_part < params->nparts; ++k_part) {
-        /* open file */
+    /*for (k_part = 0; k_part < params->nparts; ++k_part) {
+        *//* open file *//*
         FILE *newMat;
         char *ptr = strtok(params->filename, ".");
 
@@ -179,14 +248,14 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        /* close file */
+        *//* close file *//*
         if (fclose(newMat) != 0) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }
+    }*/
 
-    FILE *nonSortMat;
+    /*FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
     char org_mat_filename[MAXLINE];
@@ -207,7 +276,7 @@ int main(int argc, char *argv[]) {
     if (fclose(nonSortMat) != 0) {
         fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
         exit(EXIT_FAILURE);
-    }
+    }*/
 
     /***** End matrix conversion *****/
 
