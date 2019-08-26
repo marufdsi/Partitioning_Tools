@@ -174,8 +174,10 @@ int main(int argc, char *argv[]) {
             track_vtx[col_part] = 1;
         }
         for (k = 0; k < col; ++k) {
-            if (track_vtx[k]>0)
-                nVartex_part[(_part*col) + k] += 1;
+            if (track_vtx[k]>0) {
+                nVartex_part[(_part * col) + k] += 1;
+                track_vtx[k] = 0;
+            }
         }
         idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
         if((i+1) >= condition) {
