@@ -137,6 +137,8 @@ int main(int argc, char *argv[]) {
 
     /***** Randomize Matrix ******/
     idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    idx_t row = sqrt(params->nparts);
+    idx_t col = row;
     for(u=0; u<graph->nvtxs; ++u){
         random_vartex[u] = u;
     }
@@ -149,49 +151,66 @@ int main(int argc, char *argv[]) {
     idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     new_ids = imalloc(graph->nvtxs, "main: part");
-    idx_t *nVartex_part = imalloc(params->nparts, "main: part");
-    idx_t *nEdges_part = imalloc(params->nparts, "main: part");
-    int num_row = ceil(((double)graph->nvtxs)/params->nparts);
+    int num_row = ceil(((double)graph->nvtxs)/row);
     idx_t _part = 0, nVartex = 0, nEdgesx = 0, start = 0;
     for (i = 0; i < graph->nvtxs; ++i) {
         new_ids[random_vartex[i]] = new_id++;
-        nVartex++;
+    }
+    idx_t *nVartex_part = imalloc(graph->nvtxs, "main: part");
+    idx_t *nEdges_part = imalloc(params->nparts, "main: part");
+    idx_t *track_vtx = imalloc(col, "main: part");
+    for (int l = 0; l < col; ++l) {
+        track_vtx[l] = 0;
+    }
+    for (k = 0; k < params->nparts; ++k) {
+        nVartex_part[k] = 0;
+        nEdges_part[k] = 0;
+    }
+    for (i = 0; i < graph->nvtxs; ++i) {
+
         for (v = graph->xadj[random_vartex[i]]; v < graph->xadj[random_vartex[i] + 1]; v++) {
-            nEdgesx++;
+            idx_t col_part = new_ids[graph->adjncy[v]]/num_row;
+            nEdges_part[(_part*col) + col_part] += 1;
+            track_vtx[col_part] = 1;
+        }
+        for (int j = 0; j < col; ++j) {
+            if (track_vtx[j]>0)
+                nVartex_part[(_part*col) + j] += 1;
         }
         idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
         if((i+1) >= condition) {
-            nVartex_part[_part] = nVartex;
-            nEdges_part[_part] = nEdgesx;
+            for (int cl = 0; cl < col; ++cl) {
+                FILE *newMat;
+                char *ptr = strtok(params->filename, ".");
 
-            FILE *newMat;
-            char *ptr = strtok(params->filename, ".");
-
-            char mat_filename[MAXLINE];
-            sprintf(mat_filename, "%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, _part);
-            if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
-                fprintf(stderr, "fopen: failed to open file '%s'", ptr);
-                exit(EXIT_FAILURE);
-            }
-            fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
-            fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdgesx);
-
-            for (itr = start; itr <= i; ++itr) {
-                u = random_vartex[itr];
-                for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
-                    fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1), (double) graph->adjwgt[v]);
+                char mat_filename[MAXLINE];
+                sprintf(mat_filename, "%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, (_part+cl));
+                if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
+                    fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+                    exit(EXIT_FAILURE);
                 }
-            }
+                fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
+                fprintf(newMat, "%d %d %d\n", nVartex_part[(_part*col) + cl], graph->nvtxs, nEdges_part[(_part*col) + cl]);
 
-            /* close file */
-            if (fclose(newMat) != 0) {
-                fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
-                exit(EXIT_FAILURE);
+                for (itr = start; itr <= i; ++itr) {
+                    u = random_vartex[itr];
+                    for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
+                        if(new_ids[graph->adjncy[v]]/num_row == cl) {
+                            fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1),
+                                    (double) graph->adjwgt[v]);
+                        }
+                    }
+                }
+
+                /* close file */
+                if (fclose(newMat) != 0) {
+                    fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
+                    exit(EXIT_FAILURE);
+                }
+                track_vtx[cl] = 0;
             }
-            nVartex = 0;
-            nEdgesx = 0;
             start = i + 1;
-            _part++;
+            _part += col;
         }
     }
 
