@@ -163,8 +163,6 @@ int main(int argc, char *argv[]) {
         if((i+1) >= condition) {
             nVartex_part[_part] = nVartex;
             nEdges_part[_part] = nEdgesx;
-            nVartex = 0;
-            nEdgesx = 0;
 
             FILE *newMat;
             char *ptr = strtok(params->filename, ".");
@@ -190,6 +188,8 @@ int main(int argc, char *argv[]) {
                 fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
                 exit(EXIT_FAILURE);
             }
+            nVartex = 0;
+            nEdgesx = 0;
             start = i + 1;
             _part++;
         }
