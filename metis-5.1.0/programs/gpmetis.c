@@ -29,7 +29,7 @@ void swap_position (int *from, int *to)
 /*! Let the game begin! */
 /*************************************************************************/
 int main(int argc, char *argv[]) {
-    idx_t i, u, v, k_part;
+    idx_t i, j, l, cl, u, v, k_part;
     char *curptr, *newptr;
     idx_t options[METIS_NOPTIONS];
     graph_t *graph;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
     idx_t *nVartex_part = imalloc(graph->nvtxs, "main: part");
     idx_t *nEdges_part = imalloc(params->nparts, "main: part");
     idx_t *track_vtx = imalloc(col, "main: part");
-    for (int l = 0; l < col; ++l) {
+    for (l = 0; l < col; ++l) {
         track_vtx[l] = 0;
     }
     for (k = 0; k < params->nparts; ++k) {
@@ -173,13 +173,13 @@ int main(int argc, char *argv[]) {
             nEdges_part[(_part*col) + col_part] += 1;
             track_vtx[col_part] = 1;
         }
-        for (int j = 0; j < col; ++j) {
-            if (track_vtx[j]>0)
-                nVartex_part[(_part*col) + j] += 1;
+        for (k = 0; k < col; ++k) {
+            if (track_vtx[k]>0)
+                nVartex_part[(_part*col) + k] += 1;
         }
         idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
         if((i+1) >= condition) {
-            for (int cl = 0; cl < col; ++cl) {
+            for (cl = 0; cl < col; ++cl) {
                 FILE *newMat;
                 char *ptr = strtok(params->filename, ".");
 
