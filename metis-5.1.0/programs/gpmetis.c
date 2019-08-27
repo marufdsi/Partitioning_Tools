@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
     idx_t * new_ids;
     new_ids = imalloc(graph->nvtxs, "main: part");
     int num_row = ceil(((double)graph->nvtxs)/row);
-    idx_t _part = 0, nVartex = 0, nEdgesx = 0, start = 0;
+    idx_t _part = 0, nVartex = 0, start = 0;
     for (i = 0; i < graph->nvtxs; ++i) {
         new_ids[random_vartex[i]] = new_id++;
     }
