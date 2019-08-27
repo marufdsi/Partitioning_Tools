@@ -184,6 +184,9 @@ int main(int argc, char *argv[]) {
 
                 for (itr = start; itr <= i; ++itr) {
                     u = random_vartex[itr];
+                    if(new_ids[u] > i){
+                        printf("%d mapped wrong as %d\n", u, new_ids[u]);
+                    }
                     for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
                         if(new_ids[graph->adjncy[v]]/num_row == cl) {
                             fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1),
