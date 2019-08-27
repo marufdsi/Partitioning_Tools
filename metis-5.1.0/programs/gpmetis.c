@@ -164,9 +164,9 @@ int main(int argc, char *argv[]) {
         nVartex++;
         for (v = graph->xadj[random_vartex[i]]; v < graph->xadj[random_vartex[i] + 1]; v++) {
             idx_t col_part = new_ids[graph->adjncy[v]]/num_row;
-            nEdges_part[(_part*col) + col_part] += 1;
+            nEdges_part[_part + col_part] += 1;
         }
-        idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
+        idx_t condition = (num_row * (_part/col + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part/col + 1));
         if((i+1) >= condition) {
             printf("Part=%d, row=%d, col=%d\n", _part, row, col);
             for (cl = 0; cl < col; ++cl) {
