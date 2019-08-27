@@ -168,6 +168,7 @@ int main(int argc, char *argv[]) {
         }
         idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
         if((i+1) >= condition) {
+            printf("Part=%d, row=%d, col=%d\n", _part, row, col);
             for (cl = 0; cl < col; ++cl) {
                 FILE *newMat;
                 char *ptr = strtok(params->filename, ".");
@@ -190,6 +191,7 @@ int main(int argc, char *argv[]) {
                         }
                     }
                 }
+                printf("Done=%d\n", cl);
 
                 /* close file */
                 if (fclose(newMat) != 0) {
@@ -199,7 +201,6 @@ int main(int argc, char *argv[]) {
             }
             nVartex = 0;
             start = i + 1;
-            printf("Part=%d, row=%d, col=%d", _part, row, col);
             _part += col;
         }
     }
