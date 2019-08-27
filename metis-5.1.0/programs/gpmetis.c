@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
                     exit(EXIT_FAILURE);
                 }
                 fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
-                fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdges_part[(_part*col) + cl]);
+                fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdges_part[_part + cl]);
 
                 for (itr = start; itr <= i; ++itr) {
                     u = random_vartex[itr];
@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
                         }
                     }
                 }
-                printf("Done=%d\n", cl);
+//                printf("Done=%d\n", cl);
 
                 /* close file */
                 if (fclose(newMat) != 0) {
