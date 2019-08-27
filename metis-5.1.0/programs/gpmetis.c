@@ -156,7 +156,6 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < graph->nvtxs; ++i) {
         new_ids[random_vartex[i]] = new_id++;
     }
-    idx_t nVartex = 0;
     idx_t *nEdges_part = imalloc(params->nparts, "main: part");
     for (k = 0; k < params->nparts; ++k) {
         nEdges_part[k] = 0;
