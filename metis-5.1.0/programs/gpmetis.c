@@ -156,28 +156,16 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < graph->nvtxs; ++i) {
         new_ids[random_vartex[i]] = new_id++;
     }
-    idx_t *nVartex_part = imalloc(graph->nvtxs, "main: part");
+    idx_t nVartex = 0;
     idx_t *nEdges_part = imalloc(params->nparts, "main: part");
-    idx_t *track_vtx = imalloc(col, "main: part");
-    for (l = 0; l < col; ++l) {
-        track_vtx[l] = 0;
-    }
     for (k = 0; k < params->nparts; ++k) {
-        nVartex_part[k] = 0;
         nEdges_part[k] = 0;
     }
     for (i = 0; i < graph->nvtxs; ++i) {
-
+        nVartex++;
         for (v = graph->xadj[random_vartex[i]]; v < graph->xadj[random_vartex[i] + 1]; v++) {
             idx_t col_part = new_ids[graph->adjncy[v]]/num_row;
             nEdges_part[(_part*col) + col_part] += 1;
-            track_vtx[col_part] = 1;
-        }
-        for (k = 0; k < col; ++k) {
-            if (track_vtx[k]>0) {
-                nVartex_part[(_part * col) + k] += 1;
-                track_vtx[k] = 0;
-            }
         }
         idx_t condition = (num_row * (_part + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part + 1));
         if((i+1) >= condition) {
@@ -192,7 +180,7 @@ int main(int argc, char *argv[]) {
                     exit(EXIT_FAILURE);
                 }
                 fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
-                fprintf(newMat, "%d %d %d\n", nVartex_part[(_part*col) + cl], graph->nvtxs, nEdges_part[(_part*col) + cl]);
+                fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdges_part[(_part*col) + cl]);
 
                 for (itr = start; itr <= i; ++itr) {
                     u = random_vartex[itr];
@@ -209,8 +197,8 @@ int main(int argc, char *argv[]) {
                     fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
                     exit(EXIT_FAILURE);
                 }
-                track_vtx[cl] = 0;
             }
+            nVartex = 0;
             start = i + 1;
             _part += col;
         }
