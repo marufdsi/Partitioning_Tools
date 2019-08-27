@@ -199,6 +199,7 @@ int main(int argc, char *argv[]) {
             }
             nVartex = 0;
             start = i + 1;
+            printf("Part=%d, row=%d, col=%d", _part, row, col);
             _part += col;
         }
     }
