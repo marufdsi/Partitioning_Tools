@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
                 }
 //                printf("Done=%d\n", cl);
 
-                 close file
+//                 close file
                 if (fclose(newMat) != 0) {
                     fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
                     exit(EXIT_FAILURE);
