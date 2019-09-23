@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
     }
 
     /***** Randomize Matrix ******/
-    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     idx_t row = sqrt(params->nparts);
     idx_t col = row;
     for(u=0; u<graph->nvtxs; ++u){
@@ -206,10 +206,10 @@ int main(int argc, char *argv[]) {
             start = i + 1;
             _part += col;
         }
-    }
+    }*/
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
-    /*idx_t new_id = 0, itr = 0;
+    idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
@@ -231,13 +231,13 @@ int main(int argc, char *argv[]) {
         }
         nVartex_part[k_part] = nVartex;
         nEdges_part[k_part] = nEdgesx;
-    }*/
-    /*for (u = 0; u < graph->nvtxs; u++) {
+    }
+    for (u = 0; u < graph->nvtxs; u++) {
       printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
-    }*/
+    }
 
-    /***** Convert graph into matrix in a sorting order of partition *****/
-    /*for (k_part = 0; k_part < params->nparts; ++k_part) {
+    /// Convert graph into matrix in a sorting order of partition
+    for (k_part = 0; k_part < params->nparts; ++k_part) {
 //         open file
         FILE *newMat;
         char *ptr = strtok(params->filename, ".");
@@ -265,8 +265,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }*/
-/*
+    }
     FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
@@ -288,7 +287,7 @@ int main(int argc, char *argv[]) {
     if (fclose(nonSortMat) != 0) {
         fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
         exit(EXIT_FAILURE);
-    }*/
+    }
 
     /// End matrix conversion
 
