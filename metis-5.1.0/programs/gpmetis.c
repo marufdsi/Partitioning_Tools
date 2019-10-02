@@ -135,6 +135,50 @@ int main(int argc, char *argv[]) {
         GPReportResults(params, graph, part, objval);
     }
 
+    //// Shuffle Graph ///
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    for(u=0; u<graph->nvtxs; ++u){
+        random_vartex[u] = u;
+    }
+    srand ( time(NULL) );
+    for (i = graph->nvtxs-1; i > 0; i--) {
+        int j = rand() % (i+1);
+        // Swap arr[i] with the element at random index
+        swap_position(&random_vartex[i], &random_vartex[j]);
+    }
+
+    idx_t new_id = 0, itr = 0;
+    idx_t * new_ids;
+    new_ids = imalloc(graph->nvtxs, "main: part");
+    for (i = 0; i < graph->nvtxs; ++i) {
+        new_ids[random_vartex[i]] = new_id++;
+    }
+    FILE *shuffleMat;
+    char *ptr = strtok(params->filename, ".");
+
+    char mat_filename[MAXLINE];
+    sprintf(mat_filename, "%s_shuffle", ptr);
+    if (!(shuffleMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
+        fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+        exit(EXIT_FAILURE);
+    }
+    fprintf(shuffleMat, "%%%MatrixMarket matrix coordinate real general\n");
+    fprintf(shuffleMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
+
+    for (i = 0; i < graph->nvtxs; ++i) {
+        u = random_vartex[i];
+        for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
+            fprintf(shuffleMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1), (double) graph->adjwgt[v]);
+        }
+    }
+
+    if (fclose(shuffleMat) != 0) {
+        printf("fopen: failed to open file '%s'", ptr);
+        exit(EXIT_FAILURE);
+    }
+
+    /// end shuffle /////
+
     /***** Randomize Matrix ******/
     /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     idx_t row = sqrt(params->nparts);
@@ -209,7 +253,7 @@ int main(int argc, char *argv[]) {
     }*/
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
-    idx_t new_id = 0, itr = 0;
+    /*idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
@@ -287,7 +331,7 @@ int main(int argc, char *argv[]) {
     if (fclose(nonSortMat) != 0) {
         fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
         exit(EXIT_FAILURE);
-    }
+    }*/
 
     /// End matrix conversion
 
