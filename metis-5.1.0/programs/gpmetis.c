@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
     }
 
     //// Shuffle Graph ///
-    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     for(u=0; u<graph->nvtxs; ++u){
         random_vartex[u] = u;
     }
@@ -176,11 +176,11 @@ int main(int argc, char *argv[]) {
         printf("fopen: failed to open file '%s'", ptr);
         exit(EXIT_FAILURE);
     }
-
+*/
     /// end shuffle /////
 
     /***** Randomize Matrix ******/
-    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     idx_t row = sqrt(params->nparts);
     idx_t col = row;
     for(u=0; u<graph->nvtxs; ++u){
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
                     exit(EXIT_FAILURE);
                 }
                 fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
-                fprintf(newMat, "%d %d %d\n", nVartex, graph->nvtxs, nEdges_part[_part + cl]);
+                fprintf(newMat, "%d %d %d\n", nVartex, nVartex, nEdges_part[_part + cl]);
 
                 for (itr = start; itr <= i; ++itr) {
                     u = random_vartex[itr];
@@ -250,7 +250,7 @@ int main(int argc, char *argv[]) {
             start = i + 1;
             _part += col;
         }
-    }*/
+    }
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
     /*idx_t new_id = 0, itr = 0;
