@@ -212,6 +212,7 @@ int main(int argc, char *argv[]) {
         }
         idx_t condition = (num_row * (_part/col + 1)) > graph->nvtxs ? graph->nvtxs : (num_row * (_part/col + 1));
         if((i+1) >= condition) {
+            int startIdx = _part*num_row;
 //            printf("Part=%d, row=%d, col=%d\n", _part, row, col);
             for (cl = 0; cl < col; ++cl) {
                 FILE *newMat;
@@ -233,7 +234,7 @@ int main(int argc, char *argv[]) {
                     }
                     for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
                         if(new_ids[graph->adjncy[v]]/num_row == cl) {
-                            fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1),
+                            fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1 - startIdx), (new_ids[graph->adjncy[v]] + 1 -startIdx),
                                     (double) graph->adjwgt[v]);
                         }
                     }
