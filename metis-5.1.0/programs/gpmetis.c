@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
     }
 
     //// Shuffle Graph ///
-    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     for(u=0; u<graph->nvtxs; ++u){
         random_vartex[u] = u;
     }
@@ -176,7 +176,6 @@ int main(int argc, char *argv[]) {
         printf("fopen: failed to open file '%s'", ptr);
         exit(EXIT_FAILURE);
     }
-*/
     /// end shuffle /////
 
     /***** Randomize Matrix ******/
