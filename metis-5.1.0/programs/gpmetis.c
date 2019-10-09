@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
     }
 
     //// Shuffle Graph ///
-    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     for(u=0; u<graph->nvtxs; ++u){
         random_vartex[u] = u;
     }
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
     char *ptr = strtok(params->filename, ".");
 
     char mat_filename[MAXLINE];
-    sprintf(mat_filename, "%s_shuffle", ptr);
+    sprintf(mat_filename, "%s_rm_shuffle", ptr);
     if (!(shuffleMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
         fprintf(stderr, "fopen: failed to open file '%s'", ptr);
         exit(EXIT_FAILURE);
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
     if (fclose(shuffleMat) != 0) {
         printf("fopen: failed to open file '%s'", ptr);
         exit(EXIT_FAILURE);
-    }*/
+    }
     /// end shuffle /////
 
     /***** Randomize Matrix ******/
@@ -253,7 +253,7 @@ int main(int argc, char *argv[]) {
     }*/
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
-    idx_t new_id = 0, itr = 0;
+    /*idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
@@ -278,11 +278,11 @@ int main(int argc, char *argv[]) {
     }
     for (u = 0; u < graph->nvtxs; u++) {
       printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
-    }
+    }*/
 
 
     /// Convert graph into matrix in a sorting order of partition
-    FILE *newMat;
+    /*FILE *newMat;
     char *ptr = strtok(params->filename, ".");
 
     char mat_filename[MAXLINE];
@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }
+    }*/
 
 
     /// Convert graph into matrix into multiple sorting order of partition
