@@ -342,7 +342,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
     }*/
-    /*FILE *nonSortMat;
+    FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
     char org_mat_filename[MAXLINE];
@@ -363,7 +363,7 @@ int main(int argc, char *argv[]) {
     if (fclose(nonSortMat) != 0) {
         fprintf(stderr, "fopen: failed to open file '%s'", nonsort_ptr);
         exit(EXIT_FAILURE);
-    }*/
+    }
 
     /// End matrix conversion
 
