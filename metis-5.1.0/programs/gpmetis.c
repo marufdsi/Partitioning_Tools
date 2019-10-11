@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
                     }
                     for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
                         if(new_ids[graph->adjncy[v]]/num_row == cl) {
-                            fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1 - startIdx), (new_ids[graph->adjncy[v]] + 1 -startIdx),
+                            fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1),
                                     (double) graph->adjwgt[v]);
                         }
                     }
