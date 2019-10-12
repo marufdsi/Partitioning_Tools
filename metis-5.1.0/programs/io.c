@@ -148,7 +148,7 @@ graph_t *ReadGraph(params_t *params)
     xadj[i+1] = k;
   }
   gk_fclose(fpin);
-
+  printf("Edges=%d and found %d\n", graph->nedges, k);
   if (k != graph->nedges) {
     printf("------------------------------------------------------------------------------\n");
     printf("***  I detected an error in your input file  ***\n\n");
