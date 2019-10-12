@@ -179,8 +179,7 @@ int main(int argc, char *argv[]) {
     /// end shuffle /////
 
     /***** Randomize Matrix ******/
-//    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
-    random_vartex = imalloc(graph->nvtxs, "main: part");
+    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     idx_t row = sqrt(params->nparts);
     idx_t col = row;
     for(u=0; u<graph->nvtxs; ++u){
@@ -192,9 +191,8 @@ int main(int argc, char *argv[]) {
         // Swap arr[i] with the element at random index
         swap_position(&random_vartex[i], &random_vartex[j]);
     }
-//    idx_t new_id = 0, itr = 0;
-    new_id = 0; itr = 0;
-//    idx_t * new_ids;
+    idx_t new_id = 0, itr = 0;
+    idx_t * new_ids;
     new_ids = imalloc(graph->nvtxs, "main: part");
     int num_row = ceil(((double)graph->nvtxs)/row);
     idx_t _part = 0, nVartex = 0, start = 0;
@@ -252,7 +250,7 @@ int main(int argc, char *argv[]) {
             start = i + 1;
             _part += col;
         }
-    }
+    }*/
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
     /*idx_t new_id = 0, itr = 0;
