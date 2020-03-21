@@ -216,11 +216,9 @@ int main(int argc, char *argv[]) {
             for (cl = 0; cl < col; ++cl) {
                 FILE *newMat;
                 char *ptr = strtok(params->filename, ".");
-                char outFile[MAXLINE];
-                sprintf(outFile, "%s", ptr);
-                char *ptr2 = strtok(outFile, "/");
+
                 char mat_filename[MAXLINE];
-                sprintf(mat_filename, "%s/output/%s_random_%"PRIDX"_%"PRIDX, ptr2, strtok(NULL, "-"), params->nparts, (_part+cl));
+                sprintf(mat_filename, "%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, (_part+cl));
                 if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
                     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
                     exit(EXIT_FAILURE);
