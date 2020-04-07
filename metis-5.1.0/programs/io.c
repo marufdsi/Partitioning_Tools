@@ -86,13 +86,13 @@ graph_t *ReadMatrix(params_t *params){
         idx_t ival;
 
         if (isReal) {
-            int count = fscanf(f, "%d %d %lg\n", &idxi, &idxj, &fval);
+            int count = fscanf(fpin, "%d %d %lg\n", &idxi, &idxj, &fval);
             ival = floor(fval);
         }
         else if (isInteger) {
-            int count = fscanf(f, "%d %d %d\n", &idxi, &idxj, &ival);
+            int count = fscanf(fpin, "%d %d %d\n", &idxi, &idxj, &ival);
         } else if (isPattern) {
-            int count = fscanf(f, "%d %d\n", &idxi, &idxj);
+            int count = fscanf(fpin, "%d %d\n", &idxi, &idxj);
             ival = 1;
         }
 
