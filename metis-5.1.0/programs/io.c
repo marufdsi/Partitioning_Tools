@@ -17,7 +17,7 @@
 graph_t *ReadMatrix(params_t *params){
     idx_t MM_MAX_LINE_LENGTH = 1025;
     idx_t MM_MAX_TOKEN_LENGTH = 64;
-    idx_t isPattern = 0, isInteger = 0, isReal = 0, i, n, last, cumsum;
+    idx_t isPattern = 0, isInteger = 0, isReal = 0, n, last, cumsum;
     char * MM_REAL_STR = "real";
     char * MM_INT_STR = "integer";
     char * MM_PATTERN_STR = "pattern";
