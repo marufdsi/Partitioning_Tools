@@ -13,8 +13,123 @@
  */
 
 #include "metisbin.h"
+#include <math.h>
+graph_t *ReadMatrix(params_t *params){
+    idx_t MM_MAX_LINE_LENGTH = 1025;
+    idx_t MM_MAX_TOKEN_LENGTH = 64;
+    idx_t isPattern = 0, isInteger = 0, isReal = 0;
+    char * MM_REAL_STR = "real";
+    char * MM_INT_STR = "integer";
+    char * MM_PATTERN_STR = "pattern";
+    idx_t i, j, k, l, fmt, ncon, nfields, readew, readvw, readvs, edge, ewgt;
+    idx_t M, N, nz;
+    idx_t *xadj, *adjncy, *vwgt, *adjwgt, *vsize;
+    char *line=NULL, fmtstr[256], *curstr, *newstr;
+    char banner[MM_MAX_TOKEN_LENGTH];
+    char mtx[MM_MAX_TOKEN_LENGTH];
+    char crd[MM_MAX_TOKEN_LENGTH];
+    char data_type[MM_MAX_TOKEN_LENGTH];
+    char storage_scheme[MM_MAX_TOKEN_LENGTH];
 
 
+    size_t lnlen=0;
+    FILE *fpin;
+    graph_t *graph;
+
+    if (!gk_fexists(params->filename))
+        errexit("File %s does not exist!\n", params->filename);
+
+    graph = CreateGraph();
+    fpin = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
+    if (fgets(line, MM_MAX_LINE_LENGTH, fpin) == NULL)
+        errexit("Premature end of input file: file: %s\n", params->filename);
+
+    if (sscanf(line, "%s %s %s %s %s", banner, mtx, crd, data_type,
+               storage_scheme) != 5)
+        errexit("Premature end of input file: file: %s\n", params->filename);
+    /* Skip comment lines until you get to the first valid line */
+    do {
+        if (gk_getline(&line, &lnlen, fpin) == -1)
+            errexit("Premature end of input file: file: %s\n", params->filename);
+    } while (line[0] == '%');
+
+    if (sscanf(line, "%d %d %d", &M, &N, &nz) != 3)
+        errexit("Premature end of input file: file: %s\n", params->filename);
+    graph->nvtxs = M;
+    graph->nedges = nz;
+    graph->ncon = 1;
+
+    xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
+    adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
+    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
+    adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
+    vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
+
+    if (strcmp(data_type, MM_REAL_STR) == 0)
+        isReal = 1;
+    else if (strcmp(data_type, MM_PATTERN_STR) == 0)
+        isPattern = 1;
+    else if (strcmp(data_type, MM_INT_STR) == 0)
+        isInteger = 1;
+
+    for (int m = 0; m < M + 1; ++m) {
+        xadj[m] = 0;
+    }
+
+    idx_t *csrRowIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
+    idx_t *csrColIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
+    idx_t *csrValA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
+
+    for (int i = 0; i < nz; i++) {
+        idx_t idxi, idxj;
+        double fval;
+        idx_t ival;
+
+        if (isReal) {
+            int count = fscanf(f, "%d %d %lg\n", &idxi, &idxj, &fval);
+            ival = floor(fval);
+        }
+        else if (isInteger) {
+            int count = fscanf(f, "%d %d %d\n", &idxi, &idxj, &ival);
+        } else if (isPattern) {
+            int count = fscanf(f, "%d %d\n", &idxi, &idxj);
+            ival = 1;
+        }
+
+        // adjust from 1-based to 0-based
+        idxi--;
+        idxj--;
+
+        xadj[idxi]++;
+        csrRowIdxA_tmp[i] = idxi;
+        csrColIdxA_tmp[i] = idxj;
+        csrValA_tmp[i] = ival;
+    }
+    gk_fclose(fpin);
+    for (int i = 0, cumsum = 0; i < M; i++) {
+        int temp = xadj[i];
+        xadj[i] = cumsum;
+        cumsum += temp;
+    }
+    xadj[M] = nz;
+    for (int n = 0; n < nz; n++) {
+        int row = csrRowIdxA_tmp[n];
+        if (row < 0 || row >= M) {
+            printf("out of bound for row=%d\n", row);
+        }
+        int dest = xadj[row];
+        adjncy[dest] = csrColIdxA_tmp[n];
+        adjwgt[dest] = csrValA_tmp[n];
+
+        xadj[row]++;
+    }
+    for (int i = 0, last = 0; i <= M; i++) {
+        int temp = xadj[i];
+        xadj[i] = last;
+        last = temp;
+    }
+    return graph;
+}
 
 /*************************************************************************/
 /*! This function reads in a sparse graph */
