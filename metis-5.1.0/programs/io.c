@@ -17,7 +17,7 @@
 graph_t *ReadMatrix(params_t *params){
     idx_t MM_MAX_LINE_LENGTH = 1025;
     idx_t MM_MAX_TOKEN_LENGTH = 64;
-    idx_t isPattern = 0, isInteger = 0, isReal = 0;
+    idx_t isPattern = 0, isInteger = 0, isReal = 0, i, n, last, cumsum;
     char * MM_REAL_STR = "real";
     char * MM_INT_STR = "integer";
     char * MM_PATTERN_STR = "pattern";
@@ -72,15 +72,15 @@ graph_t *ReadMatrix(params_t *params){
     else if (strcmp(data_type, MM_INT_STR) == 0)
         isInteger = 1;
 
-    for (int m = 0; m < M + 1; ++m) {
-        xadj[m] = 0;
+    for (i = 0; i < M + 1; ++i) {
+        xadj[i] = 0;
     }
 
     idx_t *csrRowIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
     idx_t *csrColIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
     idx_t *csrValA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
 
-    for (int i = 0; i < nz; i++) {
+    for (i = 0; i < nz; i++) {
         idx_t idxi, idxj;
         double fval;
         idx_t ival;
@@ -106,13 +106,13 @@ graph_t *ReadMatrix(params_t *params){
         csrValA_tmp[i] = ival;
     }
     gk_fclose(fpin);
-    for (int i = 0, cumsum = 0; i < M; i++) {
+    for (i = 0, cumsum = 0; i < M; i++) {
         int temp = xadj[i];
         xadj[i] = cumsum;
         cumsum += temp;
     }
     xadj[M] = nz;
-    for (int n = 0; n < nz; n++) {
+    for (n = 0; n < nz; n++) {
         int row = csrRowIdxA_tmp[n];
         if (row < 0 || row >= M) {
             printf("out of bound for row=%d\n", row);
@@ -123,7 +123,7 @@ graph_t *ReadMatrix(params_t *params){
 
         xadj[row]++;
     }
-    for (int i = 0, last = 0; i <= M; i++) {
+    for (i = 0, last = 0; i <= M; i++) {
         int temp = xadj[i];
         xadj[i] = last;
         last = temp;
