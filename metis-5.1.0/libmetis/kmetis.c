@@ -20,7 +20,6 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
           real_t *tpwgts, real_t *ubvec, idx_t *options, idx_t *objval, 
           idx_t *part)
 {
-    printf("start k-way partition\n");
   int sigrval=0, renumber=0;
   graph_t *graph;
   ctrl_t *ctrl;
@@ -42,7 +41,6 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     return METIS_ERROR_INPUT;
   }
 
-  printf("set run parameter done\n");
   /* if required, change the numbering to 0 */
   if (ctrl->numflag == 1) {
     Change2CNumbering(*nvtxs, xadj, adjncy);
@@ -51,14 +49,12 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
 
   /* set up the graph */
   graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
-    printf("graph setup done\n");
   /* set up multipliers for making balance computations easier */
   SetupKWayBalMultipliers(ctrl, graph);
 
   /* set various run parameters that depend on the graph */
   ctrl->CoarsenTo = gk_max((*nvtxs)/(20*gk_log2(*nparts)), 30*(*nparts));
   ctrl->nIparts   = (ctrl->CoarsenTo == 30*(*nparts) ? 4 : 5);
-    printf("run parameter setup done\n");
   /* take care contiguity requests for disconnected graphs */
   if (ctrl->contig && !IsConnected(graph, 0)) 
     gk_errexit(SIGERR, "METIS Error: A contiguous partition is requested for a non-contiguous input graph.\n");
@@ -67,15 +63,12 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   AllocateWorkSpace(ctrl, graph);
 
   /* start the partitioning */
-    printf("call real partitioning\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
   *objval = MlevelKWayPartitioning(ctrl, graph, part);
-    printf("partition done\n");
 
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
-    printf("free memory\n");
   /* clean up */
   FreeCtrl(&ctrl);
 

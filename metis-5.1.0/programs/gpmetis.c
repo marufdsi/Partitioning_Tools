@@ -136,6 +136,7 @@ int main(int argc, char *argv[]) {
         GPReportResults(params, graph, part, objval);
     }
 
+    printf("Partition done!!!\n");
     //// Shuffle Graph ///
     /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     for(u=0; u<graph->nvtxs; ++u){
