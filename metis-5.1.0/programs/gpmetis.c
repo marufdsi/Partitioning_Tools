@@ -317,16 +317,14 @@ int main(int argc, char *argv[]) {
     for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
         FILE *newMat;
-        char *ptr = strtok(params->filename, ".");
+        char *last = strrchr(params->filename, '/');
+        char *s = last+1;
+        char *ptr = strtok(s, ".");
         char outFile[MAXLINE];
-        sprintf(outFile, "%s", ptr);
+//        sprintf(outFile, "%s", ptr);
 //        char *ptr2 = strtok(outFile, "/");
-        char *last = strrchr(outFile, '/');
-        if (last != NULL) {
-            printf("Last token: '%s'\n", last+1);
-        }
         char mat_filename[MAXLINE];
-        sprintf(mat_filename, "graph/partition/%s_%"PRIDX"_%"PRIDX, last+1, params->nparts, k_part);
+        sprintf(mat_filename, "graph/partition/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
         printf("file name: %s\n", mat_filename);
 //        char *ptr = strtok(params->filename, ".");
 //
