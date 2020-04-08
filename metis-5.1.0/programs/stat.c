@@ -65,6 +65,7 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
         kpwgts[where[i] * ncon + j] += vwgt[i * ncon + j];
     }
   }
+    printf("What is going on \n");
   /* Report on balance */
   printf(" - Balance:\n");
   for (j=0; j<ncon; j++) {
