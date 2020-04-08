@@ -127,7 +127,7 @@ graph_t *ReadMatrix(params_t *params){
     printf("Allocation done\n");
 
     adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
-    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
+//    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
     adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
     vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
 
