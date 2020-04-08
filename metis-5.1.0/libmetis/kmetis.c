@@ -63,12 +63,15 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   AllocateWorkSpace(ctrl, graph);
 
   /* start the partitioning */
+    printf("call real partitioning\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
   *objval = MlevelKWayPartitioning(ctrl, graph, part);
+    printf("partition done\n");
 
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
+    printf("free memory\n");
   /* clean up */
   FreeCtrl(&ctrl);
 
@@ -79,7 +82,7 @@ SIGTHROW:
 
   gk_siguntrap();
   gk_malloc_cleanup(0);
-
+    printf("Return to main\n");
   return metis_rcode(sigrval);
 }
 
