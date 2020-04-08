@@ -61,6 +61,7 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
         if(where[i]<0){
             printf("negative index = %d\n", where[i]);
         }
+        printf("p=%d, vw=%d\n", where[i], vwgt[i]);
         kpwgts[where[i]] += vwgt[i];
     }
     printf("simple sum\n");
