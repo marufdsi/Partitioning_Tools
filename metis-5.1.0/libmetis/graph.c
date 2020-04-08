@@ -37,15 +37,18 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     printf("setup basic info\n");
   /* setup the vertex weights */
   if (vwgt) {
+      printf("Vertex weight found\n");
     graph->vwgt      = vwgt;
     graph->free_vwgt = 0;
   }
   else {
+      printf("Vertex weight not found\n");
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
   }
     printf("setup vertex weight info\n");
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");
   graph->invtvwgt = rmalloc(ncon, "SetupGraph: invtvwgts");
+  printf("ncon%d\n", ncon);
   for (i=0; i<ncon; i++) {
     graph->tvwgt[i]    = isum(nvtxs, vwgt+i, ncon);
     graph->invtvwgt[i] = 1.0/(graph->tvwgt[i] > 0 ? graph->tvwgt[i] : 1);
