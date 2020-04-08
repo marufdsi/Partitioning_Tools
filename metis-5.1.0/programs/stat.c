@@ -41,6 +41,7 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
 
 
   /* Compute constraint-related information */
+    printf("ncon=%d, nparts=%d \n", ncon, nparts);
   kpwgts = ismalloc(ncon*nparts, 0, "ComputePartitionInfo: kpwgts");
     printf("compute constraint relate info \n");
     idx_t _p, _v;
