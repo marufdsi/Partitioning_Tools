@@ -320,10 +320,13 @@ int main(int argc, char *argv[]) {
         char *ptr = strtok(params->filename, ".");
         char outFile[MAXLINE];
         sprintf(outFile, "%s", ptr);
-        char *ptr2 = strtok(outFile, "/");
+//        char *ptr2 = strtok(outFile, "/");
+        char *last = strrchr(outFile, '/');
+        if (last != NULL) {
+            printf("Last token: '%s'\n", last+1);
+        }
         char mat_filename[MAXLINE];
-        char * prefix = ptr2;
-        sprintf(mat_filename, "graph/partition/%s_%"PRIDX"_%"PRIDX, strtok(NULL, "-"), params->nparts, k_part);
+        sprintf(mat_filename, "graph/partition/%s_%"PRIDX"_%"PRIDX, last+1, params->nparts, k_part);
         printf("file name: %s\n", mat_filename);
 //        char *ptr = strtok(params->filename, ".");
 //
