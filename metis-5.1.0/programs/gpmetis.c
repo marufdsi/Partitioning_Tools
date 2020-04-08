@@ -321,15 +321,8 @@ int main(int argc, char *argv[]) {
         char *s = last+1;
         char *ptr = strtok(s, ".");
         char outFile[MAXLINE];
-//        sprintf(outFile, "%s", ptr);
-//        char *ptr2 = strtok(outFile, "/");
         char mat_filename[MAXLINE];
         sprintf(mat_filename, "graphs/partition/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
-        printf("file name: %s\n", mat_filename);
-//        char *ptr = strtok(params->filename, ".");
-//
-//        char mat_filename[MAXLINE];
-//        sprintf(mat_filename, "%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
         if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
             fprintf(stderr, "fopen: failed to open file '%s'", ptr);
             exit(EXIT_FAILURE);
