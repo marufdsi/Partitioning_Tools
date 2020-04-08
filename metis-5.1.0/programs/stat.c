@@ -47,13 +47,6 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
   /* Compute constraint-related information */
 //  kpwgts = ismalloc(ncon*nparts, 0, "ComputePartitionInfo: kpwgts");
   kpwgts = ismalloc(nparts, 0, "ComputePartitionInfo: kpwgts");
-    idx_t _p=0, _v=0;
-    for (i = 0; i < nvtxs; ++i) {
-        printf("v=%d, p=%d\n", i, where[i]);
-    }
-    for (i = 0; i < nvtxs; ++i) {
-        _v += vwgt[i];
-    }
   for (i=0; i<nvtxs; i++) {
     for (j=0; j<ncon; j++) {
         kpwgts[where[i] * ncon + j] += vwgt[i * ncon + j];
