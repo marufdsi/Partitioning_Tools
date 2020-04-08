@@ -322,8 +322,9 @@ int main(int argc, char *argv[]) {
         sprintf(outFile, "%s", ptr);
         char *ptr2 = strtok(outFile, "/");
         char mat_filename[MAXLINE];
+        char * prefix = ptr2;
         sprintf(mat_filename, "graph/partition/%s_%"PRIDX"_%"PRIDX, strtok(NULL, "-"), params->nparts, k_part);
-
+        printf("file name: %s\n", mat_filename);
 //        char *ptr = strtok(params->filename, ".");
 //
 //        char mat_filename[MAXLINE];
