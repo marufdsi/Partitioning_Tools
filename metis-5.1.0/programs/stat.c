@@ -45,36 +45,20 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
 
 
   /* Compute constraint-related information */
-    printf("ncon=%d, nparts=%d \n", ncon, nparts);
 //  kpwgts = ismalloc(ncon*nparts, 0, "ComputePartitionInfo: kpwgts");
   kpwgts = ismalloc(nparts, 0, "ComputePartitionInfo: kpwgts");
-    printf("compute constraint relate info \n");
     idx_t _p=0, _v=0;
     for (i = 0; i < nvtxs; ++i) {
         printf("v=%d, p=%d\n", i, where[i]);
     }
-    printf("Partition okay\n");
     for (i = 0; i < nvtxs; ++i) {
         _v += vwgt[i];
     }
-    printf("checking done %d %d \n", _p, _v);
-    for (i=0; i<nvtxs; ++i) {
-//        printf("p=%d, vw=%d\n", where[i], vwgt[i]);
-        kpwgts[where[i]] += vwgt[i];
-    }
-    printf("simple sum\n");
   for (i=0; i<nvtxs; i++) {
     for (j=0; j<ncon; j++) {
-        if((where[i] * ncon + j) >= nparts){
-            printf("p = %d, j=%d\n", where[i], j);
-        }
-        if((i * ncon + j) >= nvtxs){
-            printf("i = %d, j=%d\n", i, j);
-        }
         kpwgts[where[i] * ncon + j] += vwgt[i * ncon + j];
     }
   }
-    printf("What is going on \n");
   /* Report on balance */
   printf(" - Balance:\n");
   for (j=0; j<ncon; j++) {
