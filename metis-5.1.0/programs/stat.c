@@ -48,7 +48,7 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     for (i = 0; i < nvtxs; ++i) {
         _p = where[i];
         if(_p>=nparts){
-            printf("Index out of bound problem\n");
+            printf("Index out of bound problem %d\n", _p);
         }
     }
     printf("Partition okay\n");
@@ -58,8 +58,15 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     printf("checking done\n");
 
   for (i=0; i<nvtxs; i++) {
-    for (j=0; j<ncon; j++) 
-      kpwgts[where[i]*ncon+j] += vwgt[i*ncon+j];
+    for (j=0; j<ncon; j++) {
+        if((where[i] * ncon + j) >= nparts){
+            printf("p = %d, j=%d\n", where[i], j);
+        }
+        if((i * ncon + j) >= nvtxs){
+            printf("i = %d, j=%d\n", i, j);
+        }
+        kpwgts[where[i] * ncon + j] += vwgt[i * ncon + j];
+    }
   }
   /* Report on balance */
   printf(" - Balance:\n");
