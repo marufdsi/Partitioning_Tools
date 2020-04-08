@@ -129,7 +129,7 @@ graph_t *ReadMatrix(params_t *params){
     adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
 //    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
     adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
-    vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
+//    vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
 
     if (isSymmetric) {
         for (i = 0; i < nz; i++) {
