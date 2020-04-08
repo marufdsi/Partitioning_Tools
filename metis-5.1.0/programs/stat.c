@@ -53,7 +53,10 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
         _v += vwgt[i];
     }
     printf("checking done\n");
-
+    for (i=0; i<nvtxs; i++) {
+        kpwgts[where[i]] += vwgt[i];
+    }
+    printf("simple sum\n");
   for (i=0; i<nvtxs; i++) {
     for (j=0; j<ncon; j++) {
         if((where[i] * ncon + j) >= nparts){
