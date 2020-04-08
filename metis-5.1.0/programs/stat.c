@@ -42,7 +42,8 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
 
   /* Compute constraint-related information */
     printf("ncon=%d, nparts=%d \n", ncon, nparts);
-  kpwgts = ismalloc(ncon*nparts, 0, "ComputePartitionInfo: kpwgts");
+//  kpwgts = ismalloc(ncon*nparts, 0, "ComputePartitionInfo: kpwgts");
+  kpwgts = ismalloc(nparts, 0, "ComputePartitionInfo: kpwgts");
     printf("compute constraint relate info \n");
     idx_t _p=0, _v=0;
     for (i = 0; i < nvtxs; ++i) {
@@ -54,6 +55,9 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     }
     printf("checking done\n");
     for (i=0; i<nvtxs; i++) {
+        if(where[i]>=nparts){
+            printf("index out of bound\n");
+        }
         kpwgts[where[i]] += vwgt[i];
     }
     printf("simple sum\n");
