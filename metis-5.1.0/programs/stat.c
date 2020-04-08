@@ -47,6 +47,9 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     idx_t _p, _v;
     for (i = 0; i < nvtxs; ++i) {
         _p = where[i];
+        if(_p>=nparts){
+            printf("Index out of bound problem\n");
+        }
     }
     printf("Partition okay\n");
     for (i = 0; i < nvtxs; ++i) {
