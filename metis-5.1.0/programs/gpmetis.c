@@ -44,14 +44,6 @@ int main(int argc, char *argv[]) {
 //    graph = ReadGraph(params);
     printf("Read the matrix for %s\n", params->filename);
     graph = ReadMatrix(params);
-    idx_t tmp_v, deg_c = 0;
-    for (u = 0; u < graph->nvtxs; ++u) {
-        for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
-            tmp_v = graph->adjncy[v] + graph->adjwgt[v];
-        }
-        deg_c += graph->xadj[u + 1] - graph->xadj[u];
-    }
-    printf("Read done %d\n", deg_c);
     ReadTPwgts(params, graph->ncon);
     gk_stopcputimer(params->iotimer);
 
