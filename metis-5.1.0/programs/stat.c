@@ -55,12 +55,6 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     }
     printf("checking done\n");
     for (i=0; i<nvtxs; i++) {
-        if(where[i]>=nparts){
-            printf("index out of bound\n");
-        }
-        if(where[i]<0){
-            printf("negative index = %d\n", where[i]);
-        }
         printf("p=%d, vw=%d\n", where[i], vwgt[i]);
         kpwgts[where[i]] += vwgt[i];
     }
