@@ -109,7 +109,7 @@ graph_t *ReadMatrix(params_t *params){
         }
     }
 
-    int old_val, new_val;
+    idx_t old_val, new_val;
     old_val = csrRowPtrA_counter[0];
     csrRowPtrA_counter[0] = 0;
     for (i = 1; i <= graph->nvtxs; i++) {
