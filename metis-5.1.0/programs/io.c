@@ -21,7 +21,7 @@ graph_t *ReadMatrix(params_t *params){
     char * MM_REAL_STR = "real";
     char * MM_INT_STR = "integer";
     char * MM_PATTERN_STR = "pattern";
-    cahr * MM_SYMM_STR = "symmetric";
+    char * MM_SYMM_STR = "symmetric";
     idx_t i, j, k, l, fmt, ncon, nfields, readew, readvw, readvs, edge, ewgt;
     idx_t M, N, nz;
     idx_t *xadj, *adjncy, *vwgt, *adjwgt, *vsize;
@@ -104,7 +104,7 @@ graph_t *ReadMatrix(params_t *params){
     }
     gk_fclose(fpin);
     if (isSymmetric) {
-        for (int i = 0; i < nz; i++) {
+        for (i = 0; i < nz; i++) {
             if (csrRowIdxA_tmp[i] != csrColIdxA_tmp[i])
                 csrRowPtrA_counter[csrColIdxA_tmp[i]]++;
         }
@@ -131,7 +131,7 @@ graph_t *ReadMatrix(params_t *params){
     vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
 
     if (isSymmetric) {
-        for (int i = 0; i < nz; i++) {
+        for (i = 0; i < nz; i++) {
             if (csrRowIdxA_tmp[i] != csrColIdxA_tmp[i]) {
                 int offset = xadj[csrRowIdxA_tmp[i]] + csrRowPtrA_counter[csrRowIdxA_tmp[i]];
                 adjncy[offset] = csrColIdxA_tmp[i];
@@ -150,7 +150,7 @@ graph_t *ReadMatrix(params_t *params){
             }
         }
     } else {
-        for (int i = 0; i < nz; i++) {
+        for (i = 0; i < nz; i++) {
             int offset = xadj[csrRowIdxA_tmp[i]] + csrRowPtrA_counter[csrRowIdxA_tmp[i]];
             adjncy[offset] = csrColIdxA_tmp[i];
             adjwgt[offset] = csrValA_tmp[i];
