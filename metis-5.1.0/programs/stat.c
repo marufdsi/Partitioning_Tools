@@ -30,6 +30,10 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
   xadj   = graph->xadj;
   adjncy = graph->adjncy;
   vwgt   = graph->vwgt;
+    if (!vwgt) {
+        printf("Vertex weight not found\n");
+        vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
+    }
   adjwgt = graph->adjwgt;
 
   nparts = params->nparts;
@@ -55,7 +59,7 @@ void ComputePartitionInfo(params_t *params, graph_t *graph, idx_t *where)
     }
     printf("checking done %d %d \n", _p, _v);
     for (i=0; i<nvtxs; ++i) {
-        printf("p=%d, vw=%d\n", where[i], vwgt[i]);
+//        printf("p=%d, vw=%d\n", where[i], vwgt[i]);
         kpwgts[where[i]] += vwgt[i];
     }
     printf("simple sum\n");
