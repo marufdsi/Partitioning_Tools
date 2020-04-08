@@ -35,15 +35,14 @@ graph_t *ReadMatrix(params_t *params){
     size_t lnlen=0;
     FILE *fpin, *f;
     graph_t *graph;
-
+    printf("Read the matrix\n");
     if (!gk_fexists(params->filename))
         errexit("File %s does not exist!\n", params->filename);
 
     graph = CreateGraph();
     f = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
-    if (fgets(line, MM_MAX_LINE_LENGTH, f) == NULL)
+    if (gk_getline(&line, &lnlen, f) == -1)
         errexit("Premature end of input file: file: %s\n", params->filename);
-
     if (sscanf(line, "%s %s %s %s %s", banner, mtx, crd, data_type,
                storage_scheme) != 5)
         errexit("Premature end of input file: file: %s\n", params->filename);
