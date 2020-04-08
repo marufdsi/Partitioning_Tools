@@ -48,10 +48,12 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     printf("setup vertex weight info\n");
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");
   graph->invtvwgt = rmalloc(ncon, "SetupGraph: invtvwgts");
-  printf("ncon%d\n", ncon);
+  printf("ncon=%d\n", ncon);
   for (i=0; i<ncon; i++) {
-    graph->tvwgt[i]    = isum(nvtxs, vwgt+i, ncon);
-    graph->invtvwgt[i] = 1.0/(graph->tvwgt[i] > 0 ? graph->tvwgt[i] : 1);
+      printf("setup graph total vertex weight\n");
+      graph->tvwgt[i]    = isum(nvtxs, vwgt+i, ncon);
+      printf("setup graph invert vertex weight\n");
+      graph->invtvwgt[i] = 1.0/(graph->tvwgt[i] > 0 ? graph->tvwgt[i] : 1);
   }
 
     printf("setup t_weight info\n");
