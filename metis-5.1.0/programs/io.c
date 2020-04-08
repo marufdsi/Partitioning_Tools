@@ -70,7 +70,6 @@ graph_t *ReadMatrix(params_t *params){
 
     idx_t *csrRowPtrA_counter = (idx_t *) malloc((graph->nvtxs + 1) * sizeof(idx_t));
     for (i = 0; i < graph->nvtxs + 1; ++i) {
-        xadj[i] = 0;
         csrRowPtrA_counter[i] = 0;
     }
     idx_t *csrRowIdxA_tmp = (idx_t *) malloc(nz * sizeof(idx_t));
@@ -103,6 +102,7 @@ graph_t *ReadMatrix(params_t *params){
         csrValA_tmp[i] = ival;
     }
     gk_fclose(fpin);
+    printf("Read file done\n");
     if (isSymmetric) {
         for (i = 0; i < nz; i++) {
             if (csrRowIdxA_tmp[i] != csrColIdxA_tmp[i])
@@ -111,7 +111,6 @@ graph_t *ReadMatrix(params_t *params){
     }
 
     int old_val, new_val;
-
     old_val = csrRowPtrA_counter[0];
     csrRowPtrA_counter[0] = 0;
     for (i = 1; i <= graph->nvtxs; i++) {
@@ -119,11 +118,13 @@ graph_t *ReadMatrix(params_t *params){
         csrRowPtrA_counter[i] = old_val + csrRowPtrA_counter[i - 1];
         old_val = new_val;
     }
+    printf("Convert data into csr format\n");
     graph->nedges = csrRowPtrA_counter[graph->nvtxs];
     graph->ncon = 1;
     xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
     memcpy(xadj, csrRowPtrA_counter, (graph->nvtxs + 1) * sizeof(idx_t));
     memset(csrRowPtrA_counter, 0, (graph->nvtxs + 1) * sizeof(idx_t));
+    printf("Allocation done\n");
 
     adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
     vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
