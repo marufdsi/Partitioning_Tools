@@ -17,10 +17,11 @@
 graph_t *ReadMatrix(params_t *params){
     idx_t MM_MAX_LINE_LENGTH = 1025;
     idx_t MM_MAX_TOKEN_LENGTH = 64;
-    idx_t isPattern = 0, isInteger = 0, isReal = 0, n, last, cumsum;
+    idx_t isPattern = 0, isInteger = 0, isReal = 0, n, last, cumsum, isSymmetric = 0;
     char * MM_REAL_STR = "real";
     char * MM_INT_STR = "integer";
     char * MM_PATTERN_STR = "pattern";
+    cahr * MM_SYMM_STR = "symmetric";
     idx_t i, j, k, l, fmt, ncon, nfields, readew, readvw, readvs, edge, ewgt;
     idx_t M, N, nz;
     idx_t *xadj, *adjncy, *vwgt, *adjwgt, *vsize;
@@ -48,6 +49,8 @@ graph_t *ReadMatrix(params_t *params){
         errexit("Premature end of input file: file: %s\n", params->filename);
     printf("banner=%s, mtx=%s, crd=%s, dataType=%s, storage=%s\n", banner, mtx, crd, data_type, storage_scheme);
     gk_fclose(f);
+    if (strcmp(storage_scheme, MM_SYMM_STR) == 0)
+        isSymmetric = 1;
     fpin = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
     /* Skip comment lines until you get to the first valid line */
     do {
@@ -58,15 +61,6 @@ graph_t *ReadMatrix(params_t *params){
     if (sscanf(line, "%d %d %d", &M, &N, &nz) != 3)
         errexit("Premature end of input file: file: %s\n", params->filename);
     graph->nvtxs = M;
-    graph->nedges = nz;
-    graph->ncon = 1;
-
-    xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
-    adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
-    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
-    adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
-    vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
-
     if (strcmp(data_type, MM_REAL_STR) == 0)
         isReal = 1;
     else if (strcmp(data_type, MM_PATTERN_STR) == 0)
@@ -74,13 +68,14 @@ graph_t *ReadMatrix(params_t *params){
     else if (strcmp(data_type, MM_INT_STR) == 0)
         isInteger = 1;
 
-    for (i = 0; i < M + 1; ++i) {
+    idx_t *csrRowPtrA_counter = (idx_t *) malloc((graph->nvtxs + 1) * sizeof(idx_t));
+    for (i = 0; i < graph->nvtxs + 1; ++i) {
         xadj[i] = 0;
+        csrRowPtrA_counter[i] = 0;
     }
-
-    idx_t *csrRowIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
-    idx_t *csrColIdxA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
-    idx_t *csrValA_tmp = (idx_t *) malloc(graph->nedges * sizeof(idx_t));
+    idx_t *csrRowIdxA_tmp = (idx_t *) malloc(nz * sizeof(idx_t));
+    idx_t *csrColIdxA_tmp = (idx_t *) malloc(nz * sizeof(idx_t));
+    idx_t *csrValA_tmp = (idx_t *) malloc(nz * sizeof(idx_t));
 
     for (i = 0; i < nz; i++) {
         idx_t idxi, idxj;
@@ -102,35 +97,71 @@ graph_t *ReadMatrix(params_t *params){
         idxi--;
         idxj--;
 
-        xadj[idxi]++;
+        csrRowPtrA_counter[idxi]++;
         csrRowIdxA_tmp[i] = idxi;
         csrColIdxA_tmp[i] = idxj;
         csrValA_tmp[i] = ival;
     }
     gk_fclose(fpin);
-    printf("Read done\n");
-    for (i = 0, cumsum = 0; i < M; i++) {
-        int temp = xadj[i];
-        xadj[i] = cumsum;
-        cumsum += temp;
-    }
-    xadj[M] = nz;
-    for (n = 0; n < nz; n++) {
-        int row = csrRowIdxA_tmp[n];
-        if (row < 0 || row >= M) {
-            printf("out of bound for row=%d\n", row);
+    if (isSymmetric) {
+        for (int i = 0; i < nz; i++) {
+            if (csrRowIdxA_tmp[i] != csrColIdxA_tmp[i])
+                csrRowPtrA_counter[csrColIdxA_tmp[i]]++;
         }
-        int dest = xadj[row];
-        adjncy[dest] = csrColIdxA_tmp[n];
-        adjwgt[dest] = csrValA_tmp[n];
+    }
 
-        xadj[row]++;
+    int old_val, new_val;
+
+    old_val = csrRowPtrA_counter[0];
+    csrRowPtrA_counter[0] = 0;
+    for (i = 1; i <= graph->nvtxs; i++) {
+        new_val = csrRowPtrA_counter[i];
+        csrRowPtrA_counter[i] = old_val + csrRowPtrA_counter[i - 1];
+        old_val = new_val;
     }
-    for (i = 0, last = 0; i <= M; i++) {
-        int temp = xadj[i];
-        xadj[i] = last;
-        last = temp;
+    graph->nedges = csrRowPtrA_counter[graph->nvtxs];
+    graph->ncon = 1;
+    xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
+    memcpy(xadj, csrRowPtrA_counter, (graph->nvtxs + 1) * sizeof(idx_t));
+    memset(csrRowPtrA_counter, 0, (graph->nvtxs + 1) * sizeof(idx_t));
+
+    adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
+    vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
+    adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
+    vsize  = graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
+
+    if (isSymmetric) {
+        for (int i = 0; i < nz; i++) {
+            if (csrRowIdxA_tmp[i] != csrColIdxA_tmp[i]) {
+                int offset = xadj[csrRowIdxA_tmp[i]] + csrRowPtrA_counter[csrRowIdxA_tmp[i]];
+                adjncy[offset] = csrColIdxA_tmp[i];
+                adjwgt[offset] = csrValA_tmp[i];
+                csrRowPtrA_counter[csrRowIdxA_tmp[i]]++;
+
+                offset = xadj[csrColIdxA_tmp[i]] + csrRowPtrA_counter[csrColIdxA_tmp[i]];
+                adjncy[offset] = csrRowIdxA_tmp[i];
+                adjwgt[offset] = csrValA_tmp[i];
+                csrRowPtrA_counter[csrColIdxA_tmp[i]]++;
+            } else {
+                int offset = xadj[csrRowIdxA_tmp[i]] + csrRowPtrA_counter[csrRowIdxA_tmp[i]];
+                adjncy[offset] = csrColIdxA_tmp[i];
+                adjwgt[offset] = csrValA_tmp[i];
+                csrRowPtrA_counter[csrRowIdxA_tmp[i]]++;
+            }
+        }
+    } else {
+        for (int i = 0; i < nz; i++) {
+            int offset = xadj[csrRowIdxA_tmp[i]] + csrRowPtrA_counter[csrRowIdxA_tmp[i]];
+            adjncy[offset] = csrColIdxA_tmp[i];
+            adjwgt[offset] = csrValA_tmp[i];
+            csrRowPtrA_counter[csrRowIdxA_tmp[i]]++;
+        }
     }
+    // free tmp space
+    free(csrColIdxA_tmp);
+    free(csrValA_tmp);
+    free(csrRowIdxA_tmp);
+    free(csrRowPtrA_counter);
     return graph;
 }
 
