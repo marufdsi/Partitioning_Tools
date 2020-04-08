@@ -33,20 +33,23 @@ graph_t *ReadMatrix(params_t *params){
 
 
     size_t lnlen=0;
-    FILE *fpin;
+    FILE *fpin, *f;
     graph_t *graph;
 
     if (!gk_fexists(params->filename))
         errexit("File %s does not exist!\n", params->filename);
 
     graph = CreateGraph();
-    fpin = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
-    if (fgets(line, MM_MAX_LINE_LENGTH, fpin) == NULL)
+    f = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
+    if (fgets(line, MM_MAX_LINE_LENGTH, f) == NULL)
         errexit("Premature end of input file: file: %s\n", params->filename);
 
     if (sscanf(line, "%s %s %s %s %s", banner, mtx, crd, data_type,
                storage_scheme) != 5)
         errexit("Premature end of input file: file: %s\n", params->filename);
+    printf("banner=%s, mtx=%s, crd=%s, dataType=%s, storage=%s\n", banner, mtx, crd, data_type, storage_scheme);
+    gk_fclose(f);
+    fpin = gk_fopen(params->filename, "r", "ReadGRaph: Graph");
     /* Skip comment lines until you get to the first valid line */
     do {
         if (gk_getline(&line, &lnlen, fpin) == -1)
@@ -106,6 +109,7 @@ graph_t *ReadMatrix(params_t *params){
         csrValA_tmp[i] = ival;
     }
     gk_fclose(fpin);
+    printf("Read done\n");
     for (i = 0, cumsum = 0; i < M; i++) {
         int temp = xadj[i];
         xadj[i] = cumsum;
