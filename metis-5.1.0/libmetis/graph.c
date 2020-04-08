@@ -34,7 +34,7 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
   graph->adjncy      = adjncy;
   graph->free_adjncy = 0;
 
-
+    printf("setup basic info\n");
   /* setup the vertex weights */
   if (vwgt) {
     graph->vwgt      = vwgt;
@@ -43,7 +43,7 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
   else {
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
   }
-
+    printf("setup vertex weight info\n");
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");
   graph->invtvwgt = rmalloc(ncon, "SetupGraph: invtvwgts");
   for (i=0; i<ncon; i++) {
@@ -51,7 +51,7 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     graph->invtvwgt[i] = 1.0/(graph->tvwgt[i] > 0 ? graph->tvwgt[i] : 1);
   }
 
-
+    printf("setup t_weight info\n");
   if (ctrl->objtype == METIS_OBJTYPE_VOL) { 
     /* Setup the vsize */
     if (vsize) {
@@ -61,7 +61,7 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     else {
       vsize = graph->vsize = ismalloc(nvtxs, 1, "SetupGraph: vsize");
     }
-
+      printf("setup memory object type \n");
     /* Allocate memory for edge weights and initialize them to the sum of the vsize */
     adjwgt = graph->adjwgt = imalloc(graph->nedges, "SetupGraph: adjwgt");
     for (i=0; i<nvtxs; i++) {
@@ -78,15 +78,16 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     else {
       adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "SetupGraph: adjwgt");
     }
+      printf("setup edge-cut info\n");
   }
 
-
+    printf("setup various info\n");
   /* setup various derived info */
   SetupGraph_tvwgt(graph);
-
+    printf("setup label info\n");
   if (ctrl->optype == METIS_OP_PMETIS || ctrl->optype == METIS_OP_OMETIS) 
     SetupGraph_label(graph);
-
+    printf("setup asert info\n");
   ASSERT(CheckGraph(graph, ctrl->numflag, 1));
 
   return graph;
