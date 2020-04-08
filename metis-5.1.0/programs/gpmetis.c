@@ -280,9 +280,6 @@ int main(int argc, char *argv[]) {
         nVartex_part[k_part] = nVartex;
         nEdges_part[k_part] = nEdgesx;
     }
-    for (u = 0; u < graph->nvtxs; u++) {
-      printf("Vertex:%d to new ID:%d \n", u, new_ids[u]);
-    }
 
 
     /// Convert graph into matrix in a sorting order of partition
