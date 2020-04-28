@@ -41,9 +41,9 @@ int main(int argc, char *argv[]) {
     params = parse_cmdline(argc, argv);
 
     gk_startcputimer(params->iotimer);
-//    graph = ReadGraph(params);
+    graph = ReadGraph(params);
     printf("Read the matrix for %s\n", params->filename);
-    graph = ReadMatrix(params);
+//    graph = ReadMatrix(params);
     ReadTPwgts(params, graph->ncon);
     gk_stopcputimer(params->iotimer);
 
