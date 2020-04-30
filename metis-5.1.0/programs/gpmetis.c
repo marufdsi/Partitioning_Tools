@@ -37,13 +37,16 @@ int main(int argc, char *argv[]) {
     idx_t objval;
     params_t *params;
     int status = 0;
-
+    int argi=1;
+    if (argc > argi){
+        printf("[%d] param: %s \n", argv[argi++]);
+    }
     params = parse_cmdline(argc, argv);
 
     gk_startcputimer(params->iotimer);
-    graph = ReadGraph(params);
+//    graph = ReadGraph(params);
     printf("Read the matrix for %s\n", params->filename);
-//    graph = ReadMatrix(params);
+    graph = ReadMatrix(params);
     ReadTPwgts(params, graph->ncon);
     gk_stopcputimer(params->iotimer);
 
