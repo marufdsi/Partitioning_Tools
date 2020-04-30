@@ -31,8 +31,8 @@ void swap_position (int *from, int *to)
 int main(int argc, char *argv[]) {
     printf("Method called\n");
     int argi=1;
-    if (argc > argi){
-        printf("[%d] param: %s \n", argv[argi++]);
+    for(argi=1; argi < argc; ++argi){
+        printf("[%d] param: %s \n", argi, argv[argi]);
     }
     idx_t i, j, k, l, cl, u, v, k_part;
     char *curptr, *newptr;
