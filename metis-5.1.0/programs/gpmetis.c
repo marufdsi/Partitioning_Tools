@@ -29,6 +29,10 @@ void swap_position (int *from, int *to)
 /*! Let the game begin! */
 /*************************************************************************/
 int main(int argc, char *argv[]) {
+    int argi=1;
+    if (argc > argi){
+        printf("[%d] param: %s \n", argv[argi++]);
+    }
     idx_t i, j, k, l, cl, u, v, k_part;
     char *curptr, *newptr;
     idx_t options[METIS_NOPTIONS];
@@ -37,10 +41,7 @@ int main(int argc, char *argv[]) {
     idx_t objval;
     params_t *params;
     int status = 0;
-    int argi=1;
-    if (argc > argi){
-        printf("[%d] param: %s \n", argv[argi++]);
-    }
+
     params = parse_cmdline(argc, argv);
 
     gk_startcputimer(params->iotimer);
