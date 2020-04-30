@@ -29,6 +29,7 @@ void swap_position (int *from, int *to)
 /*! Let the game begin! */
 /*************************************************************************/
 int main(int argc, char *argv[]) {
+    printf("Method called\n");
     int argi=1;
     if (argc > argi){
         printf("[%d] param: %s \n", argv[argi++]);
