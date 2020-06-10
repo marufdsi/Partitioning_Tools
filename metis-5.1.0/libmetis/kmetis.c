@@ -20,6 +20,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
           real_t *tpwgts, real_t *ubvec, idx_t *options, idx_t *objval, 
           idx_t *part)
 {
+    printf("Start k way partition\n");
   int sigrval=0, renumber=0;
   graph_t *graph;
   ctrl_t *ctrl;
@@ -33,7 +34,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   if ((sigrval = gk_sigcatch()) != 0)
     goto SIGTHROW;
 
-
+printf("debug 1\n");
   /* set up the run parameters */
   ctrl = SetupCtrl(METIS_OP_KMETIS, options, *ncon, *nparts, tpwgts, ubvec);
   if (!ctrl) {
@@ -46,7 +47,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     Change2CNumbering(*nvtxs, xadj, adjncy);
     renumber = 1;
   }
-
+    printf("debug 2\n");
   /* set up the graph */
   graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
   /* set up multipliers for making balance computations easier */
@@ -58,7 +59,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   /* take care contiguity requests for disconnected graphs */
   if (ctrl->contig && !IsConnected(graph, 0)) 
     gk_errexit(SIGERR, "METIS Error: A contiguous partition is requested for a non-contiguous input graph.\n");
-    
+    printf("debug 3\n");
   /* allocate workspace memory */  
   AllocateWorkSpace(ctrl, graph);
 
@@ -66,20 +67,20 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
   *objval = MlevelKWayPartitioning(ctrl, graph, part);
-
+    printf("debug 4\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
   /* clean up */
   FreeCtrl(&ctrl);
-
+    printf("debug 5\n");
 SIGTHROW:
   /* if required, change the numbering back to 1 */
   if (renumber)
     Change2FNumbering(*nvtxs, xadj, adjncy, part);
-
   gk_siguntrap();
-  gk_malloc_cleanup(0);
-  return metis_rcode(sigrval);
+    gk_malloc_cleanup(0);
+    printf("debug 6\n");
+    return metis_rcode(sigrval);
 }
 
 
