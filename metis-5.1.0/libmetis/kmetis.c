@@ -28,7 +28,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   /* set up malloc cleaning code and signal catchers */
   if (!gk_malloc_init()) 
     return METIS_ERROR_MEMORY;
-
+    printf("debug 0\n");
   gk_sigtrap();
 
   if ((sigrval = gk_sigcatch()) != 0)
@@ -40,39 +40,39 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     gk_siguntrap();
     return METIS_ERROR_INPUT;
   }
-
+    printf("debug 1\n");
   /* if required, change the numbering to 0 */
   if (ctrl->numflag == 1) {
     Change2CNumbering(*nvtxs, xadj, adjncy);
     renumber = 1;
   }
+    printf("debug 2\n");
   /* set up the graph */
   graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
   /* set up multipliers for making balance computations easier */
   SetupKWayBalMultipliers(ctrl, graph);
-
+    printf("debug 3\n");
   /* set various run parameters that depend on the graph */
   ctrl->CoarsenTo = gk_max((*nvtxs)/(20*gk_log2(*nparts)), 30*(*nparts));
   ctrl->nIparts   = (ctrl->CoarsenTo == 30*(*nparts) ? 4 : 5);
   /* take care contiguity requests for disconnected graphs */
   if (ctrl->contig && !IsConnected(graph, 0)) 
     gk_errexit(SIGERR, "METIS Error: A contiguous partition is requested for a non-contiguous input graph.\n");
-    printf("debug 0\n");
   /* allocate workspace memory */  
   AllocateWorkSpace(ctrl, graph);
-    printf("debug 1\n");
+    printf("debug 4\n");
   /* start the partitioning */
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
-    printf("debug 2\n");
+    printf("debug 5\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
-    printf("debug 3\n");
+    printf("debug 6\n");
   *objval = MlevelKWayPartitioning(ctrl, graph, part);
-    printf("debug 4\n");
+    printf("debug 7\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
   /* clean up */
   FreeCtrl(&ctrl);
-    printf("debug 5\n");
+    printf("debug 8\n");
 SIGTHROW:
   /* if required, change the numbering back to 1 */
   if (renumber)
