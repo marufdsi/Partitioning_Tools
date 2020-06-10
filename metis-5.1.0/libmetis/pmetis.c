@@ -161,7 +161,6 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
   idx_t *label, *where;
   graph_t *lgraph, *rgraph;
   real_t wsum, *tpwgts2;
-printf("vertex found in the graph: %d\n", graph->nvtxs);
   if ((nvtxs = graph->nvtxs) == 0) {
     printf("\t***Cannot bisect a graph with 0 vertices!\n"
            "\t***You are trying to partition a graph into too many parts!\n");
