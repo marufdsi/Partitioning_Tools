@@ -48,11 +48,14 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   }
   /* set up the graph */
   if(vsize == NULL){
+      printf("vsize null found\n");
       vsize = ismalloc((*nvtxs), 1, "ReadGraph: vsize");
   }
   if(vwgt == NULL){
+      printf("vwgt null found\n");
       vwgt = ismalloc((*ncon)*(*nvtxs), 1, "ReadGraph: vwgt");
   }
+  printf("ncod = %d, nvtx=%d\n", *ncon, *nvtxs);
     graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
     printf("debug 2\n");
     /* set up multipliers for making balance computations easier */
