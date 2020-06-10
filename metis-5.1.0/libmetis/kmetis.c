@@ -46,10 +46,10 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     Change2CNumbering(*nvtxs, xadj, adjncy);
     renumber = 1;
   }
-    printf("debug 2\n");
   /* set up the graph */
-  graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
-  /* set up multipliers for making balance computations easier */
+    graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
+    printf("debug 2\n");
+    /* set up multipliers for making balance computations easier */
   SetupKWayBalMultipliers(ctrl, graph);
     printf("debug 3\n");
   /* set various run parameters that depend on the graph */
