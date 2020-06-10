@@ -122,7 +122,7 @@ int METIS_PartGraphRecursive(idx_t *nvtxs, idx_t *ncon, idx_t *xadj,
 
   /* set up the graph */
   graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
-
+printf("No. V: %d, graph V: %d \n", *nvtxs, graph->nvtxs);
   /* allocate workspace memory */
   AllocateWorkSpace(ctrl, graph);
 
