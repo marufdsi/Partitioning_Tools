@@ -42,6 +42,7 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
   else {
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
   }*/
+  printf("[inside graph] ncon: %d, nvtx=%d\n", ncon, nvtxs);
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
     printf("new graph 1\n");
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");

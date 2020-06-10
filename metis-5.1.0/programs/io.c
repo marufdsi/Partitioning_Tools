@@ -122,7 +122,7 @@ graph_t *ReadMatrix(params_t *params){
     xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
     memcpy(xadj, csrRowPtrA_counter, (graph->nvtxs + 1) * sizeof(idx_t));
     memset(csrRowPtrA_counter, 0, (graph->nvtxs + 1) * sizeof(idx_t));
-
+    printf("[inside reader] ncon: %d, nvtx=%d\n", ncon, graph->nvtxs);
     adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
     vwgt   = graph->vwgt   = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
     adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
