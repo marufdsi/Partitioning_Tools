@@ -35,13 +35,14 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
   graph->free_adjncy = 0;
     printf("new graph 0\n");
   /* setup the vertex weights */
-  if (vwgt) {
+  /*if (vwgt) {
     graph->vwgt      = vwgt;
     graph->free_vwgt = 0;
   }
   else {
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
-  }
+  }*/
+    vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
     printf("new graph 1\n");
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");
   graph->invtvwgt = rmalloc(ncon, "SetupGraph: invtvwgts");
