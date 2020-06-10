@@ -71,8 +71,8 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
       for (j=xadj[i]; j<xadj[i+1]; j++)
         adjwgt[j] = 1+vsize[i]+vsize[adjncy[j]];
     }
+      printf("new graph 5\n");
   }
-    printf("new graph 5\n");
   else { /* For edgecut minimization */
     /* setup the edge weights */
     if (adjwgt) {
@@ -82,14 +82,15 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     else {
       adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "SetupGraph: adjwgt");
     }
+      printf("new graph 6\n");
   }
-    printf("new graph 6\n");
+    printf("new graph 7\n");
   /* setup various derived info */
   SetupGraph_tvwgt(graph);
   if (ctrl->optype == METIS_OP_PMETIS || ctrl->optype == METIS_OP_OMETIS) 
     SetupGraph_label(graph);
   ASSERT(CheckGraph(graph, ctrl->numflag, 1));
-    printf("new graph 7\n");
+    printf("new graph 8\n");
   return graph;
 }
 
