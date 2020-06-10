@@ -118,7 +118,7 @@ graph_t *ReadMatrix(params_t *params){
         old_val = new_val;
     }
     graph->nedges = csrRowPtrA_counter[graph->nvtxs];
-    graph->ncon = 1;
+    ncon = graph->ncon = 1;
     xadj   = graph->xadj   = ismalloc(graph->nvtxs+1, 0, "ReadGraph: xadj");
     memcpy(xadj, csrRowPtrA_counter, (graph->nvtxs + 1) * sizeof(idx_t));
     memset(csrRowPtrA_counter, 0, (graph->nvtxs + 1) * sizeof(idx_t));
