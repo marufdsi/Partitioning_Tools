@@ -335,6 +335,7 @@ int main(int argc, char *argv[]) {
         char *ptr = strtok(s, ".");
         char outFile[MAXLINE];
         char mat_filename[MAXLINE];
+        printf("K-way partition start for %s \n", ptr);
         sprintf(mat_filename, "graphs/partition/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
         if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
             fprintf(stderr, "fopen: failed to open file '%s'", ptr);
