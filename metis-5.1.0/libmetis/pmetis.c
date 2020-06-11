@@ -168,7 +168,6 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
   }
 
   ncon = graph->ncon;
-    printf("ncon: %d\n", ncon);
   /* determine the weights of the two partitions as a function of the weight of the
      target partition weights */
   WCOREPUSH;

@@ -28,7 +28,6 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   /* set up malloc cleaning code and signal catchers */
   if (!gk_malloc_init()) 
     return METIS_ERROR_MEMORY;
-    printf("debug 0\n");
   gk_sigtrap();
 
   if ((sigrval = gk_sigcatch()) != 0)
@@ -40,7 +39,6 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     gk_siguntrap();
     return METIS_ERROR_INPUT;
   }
-    printf("debug 1\n");
   /* if required, change the numbering to 0 */
   if (ctrl->numflag == 1) {
     Change2CNumbering(*nvtxs, xadj, adjncy);

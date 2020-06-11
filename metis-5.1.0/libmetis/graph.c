@@ -33,7 +33,6 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
 
   graph->adjncy      = adjncy;
   graph->free_adjncy = 0;
-    printf("new graph 0\n");
   /* setup the vertex weights */
   /*if (vwgt) {
     graph->vwgt      = vwgt;
