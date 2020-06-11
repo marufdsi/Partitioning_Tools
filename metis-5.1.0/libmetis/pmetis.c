@@ -177,10 +177,8 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
     tpwgts2[i]      = rsum((nparts>>1), tpwgts+i, ncon);
     tpwgts2[ncon+i] = 1.0 - tpwgts2[i];
   }
-printf("Check again 0\n");
   /* perform the bisection */
   objval = MultilevelBisect(ctrl, graph, tpwgts2);
-    printf("Check again 1\n");
   WCOREPOP;
 
   label = graph->label;
@@ -190,7 +188,6 @@ printf("Check again 0\n");
 
   if (nparts > 2) 
     SplitGraphPart(ctrl, graph, &lgraph, &rgraph);
-    printf("Check again 2\n");
   /* Free the memory of the top level graph */
   FreeGraph(&graph);
   /* Scale the fractions in the tpwgts according to the true weight */
@@ -199,7 +196,6 @@ printf("Check again 0\n");
     rscale((nparts>>1), 1.0/wsum, tpwgts+i, ncon);
     rscale(nparts-(nparts>>1), 1.0/(1.0-wsum), tpwgts+(nparts>>1)*ncon+i, ncon);
   }
-    printf("Check again 3\n");
   /* Do the recursive call */
   if (nparts > 3) {
     objval += MlevelRecursiveBisection(ctrl, lgraph, (nparts>>1), part, 
@@ -212,7 +208,6 @@ printf("Check again 0\n");
     objval += MlevelRecursiveBisection(ctrl, rgraph, nparts-(nparts>>1), part, 
                tpwgts+(nparts>>1)*ncon, fpart+(nparts>>1));
   }
-    printf("Check again 4\n");
 
   return objval;
 }
