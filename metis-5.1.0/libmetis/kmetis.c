@@ -48,19 +48,15 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   }
   /* set up the graph */
   if(vsize == NULL){
-      printf("vsize null found\n");
       vsize = ismalloc((*nvtxs), 1, "ReadGraph: vsize");
   }
   if(vwgt == NULL){
       printf("vwgt null found\n");
       vwgt = ismalloc((*ncon)*(*nvtxs), 1, "ReadGraph: vwgt");
   }
-  printf("ncod = %d, nvtx=%d\n", *ncon, *nvtxs);
     graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
-    printf("debug 2\n");
     /* set up multipliers for making balance computations easier */
   SetupKWayBalMultipliers(ctrl, graph);
-    printf("debug 3\n");
   /* set various run parameters that depend on the graph */
   ctrl->CoarsenTo = gk_max((*nvtxs)/(20*gk_log2(*nparts)), 30*(*nparts));
   ctrl->nIparts   = (ctrl->CoarsenTo == 30*(*nparts) ? 4 : 5);
@@ -69,26 +65,20 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
     gk_errexit(SIGERR, "METIS Error: A contiguous partition is requested for a non-contiguous input graph.\n");
   /* allocate workspace memory */  
   AllocateWorkSpace(ctrl, graph);
-    printf("debug 4\n");
   /* start the partitioning */
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
-    printf("debug 5\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
-    printf("debug 6\n");
   *objval = MlevelKWayPartitioning(ctrl, graph, part);
-    printf("debug 7\n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
   /* clean up */
   FreeCtrl(&ctrl);
-    printf("debug 8\n");
 SIGTHROW:
   /* if required, change the numbering back to 1 */
   if (renumber)
     Change2FNumbering(*nvtxs, xadj, adjncy, part);
   gk_siguntrap();
     gk_malloc_cleanup(0);
-    printf("debug 6\n");
     return metis_rcode(sigrval);
 }
 

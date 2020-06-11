@@ -35,29 +35,23 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
   graph->free_adjncy = 0;
     printf("new graph 0\n");
   /* setup the vertex weights */
-  /*if (vwgt) {
+  if (vwgt) {
     graph->vwgt      = vwgt;
     graph->free_vwgt = 0;
   }
   else {
     vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
-  }*/
-  printf("[inside graph] ncon: %d, nvtx=%d\n", ncon, nvtxs);
-    vwgt = graph->vwgt = ismalloc(ncon*nvtxs, 1, "SetupGraph: vwgt");
-    printf("new graph 1\n");
+  }
   graph->tvwgt    = imalloc(ncon, "SetupGraph: tvwgts");
   graph->invtvwgt = rmalloc(ncon, "SetupGraph: invtvwgts");
-    printf("new graph 2\n");
     idx_t val = 0;
     for (i = 0; i < nvtxs; ++i) {
         val += vwgt[i];
     }
-    printf("new graph 3\n");
   for (i=0; i<ncon; i++) {
       graph->tvwgt[i]    = isum(nvtxs, vwgt+i, ncon);
       graph->invtvwgt[i] = 1.0/(graph->tvwgt[i] > 0 ? graph->tvwgt[i] : 1);
   }
-    printf("new graph 4\n");
   if (ctrl->objtype == METIS_OBJTYPE_VOL) { 
     /* Setup the vsize */
     if (vsize) {
@@ -73,7 +67,6 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
       for (j=xadj[i]; j<xadj[i+1]; j++)
         adjwgt[j] = 1+vsize[i]+vsize[adjncy[j]];
     }
-      printf("new graph 5\n");
   }
   else { /* For edgecut minimization */
     /* setup the edge weights */
@@ -84,15 +77,12 @@ graph_t *SetupGraph(ctrl_t *ctrl, idx_t nvtxs, idx_t ncon, idx_t *xadj,
     else {
       adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "SetupGraph: adjwgt");
     }
-      printf("new graph 6\n");
   }
-    printf("new graph 7\n");
   /* setup various derived info */
   SetupGraph_tvwgt(graph);
   if (ctrl->optype == METIS_OP_PMETIS || ctrl->optype == METIS_OP_OMETIS) 
     SetupGraph_label(graph);
   ASSERT(CheckGraph(graph, ctrl->numflag, 1));
-    printf("new graph 8\n");
   return graph;
 }
 
