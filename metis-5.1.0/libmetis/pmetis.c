@@ -168,7 +168,7 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
   }
 
   ncon = graph->ncon;
-
+    printf("ncon: %d\n", ncon);
   /* determine the weights of the two partitions as a function of the weight of the
      target partition weights */
   WCOREPUSH;
@@ -177,10 +177,10 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
     tpwgts2[i]      = rsum((nparts>>1), tpwgts+i, ncon);
     tpwgts2[ncon+i] = 1.0 - tpwgts2[i];
   }
-
+printf("Check again 0");
   /* perform the bisection */
   objval = MultilevelBisect(ctrl, graph, tpwgts2);
-
+    printf("Check again 1");
   WCOREPOP;
 
   label = graph->label;
@@ -190,17 +190,16 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
 
   if (nparts > 2) 
     SplitGraphPart(ctrl, graph, &lgraph, &rgraph);
-
+    printf("Check again 2");
   /* Free the memory of the top level graph */
   FreeGraph(&graph);
-
   /* Scale the fractions in the tpwgts according to the true weight */
   for (i=0; i<ncon; i++) {
     wsum = rsum((nparts>>1), tpwgts+i, ncon);
     rscale((nparts>>1), 1.0/wsum, tpwgts+i, ncon);
     rscale(nparts-(nparts>>1), 1.0/(1.0-wsum), tpwgts+(nparts>>1)*ncon+i, ncon);
   }
-
+    printf("Check again 3");
   /* Do the recursive call */
   if (nparts > 3) {
     objval += MlevelRecursiveBisection(ctrl, lgraph, (nparts>>1), part, 
@@ -213,7 +212,7 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
     objval += MlevelRecursiveBisection(ctrl, rgraph, nparts-(nparts>>1), part, 
                tpwgts+(nparts>>1)*ncon, fpart+(nparts>>1));
   }
-
+    printf("Check again 4");
 
   return objval;
 }
