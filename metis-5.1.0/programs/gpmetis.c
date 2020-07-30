@@ -300,6 +300,7 @@ int main(int argc, char *argv[]) {
     char *last = strrchr(params->filename, '/');
     char *s = last+1;
     char *ptr = strtok(s, ".");
+    char mat_filename[MAXLINE];
     sprintf(mat_filename, "graphs/sorted/%s_%"PRIDX, ptr, params->nparts);
     if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
         fprintf(stderr, "fopen: failed to open file '%s'", ptr);
