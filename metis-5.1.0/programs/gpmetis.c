@@ -296,11 +296,11 @@ int main(int argc, char *argv[]) {
 
 
     /// Convert graph into matrix in a sorting order of partition
-    /*FILE *newMat;
-    char *ptr = strtok(params->filename, ".");
-
-    char mat_filename[MAXLINE];
-    sprintf(mat_filename, "%s_partitioned_%"PRIDX, ptr, params->nparts);
+    FILE *newMat;
+    char *last = strrchr(params->filename, '/');
+    char *s = last+1;
+    char *ptr = strtok(s, ".");
+    sprintf(mat_filename, "graphs/sorted/%s_%"PRIDX, ptr, params->nparts);
     if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
         fprintf(stderr, "fopen: failed to open file '%s'", ptr);
         exit(EXIT_FAILURE);
@@ -323,11 +323,11 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }*/
+    }
 
 
     /// Convert graph into matrix into multiple sorting order of partition
-    for (k_part = 0; k_part < params->nparts; ++k_part) {
+    /*for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
         FILE *newMat;
         char *last = strrchr(params->filename, '/');
@@ -357,7 +357,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }
+    }*/
     /*FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
