@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
 
 
     /// Convert graph into matrix in a sorting order of partition
-    /*FILE *newMat;
+    FILE *newMat;
     char *last = strrchr(params->filename, '/');
     char *s = last+1;
     char *ptr = strtok(s, ".");
@@ -323,10 +323,9 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
         exit(EXIT_FAILURE);
     }
-*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    for (k_part = 0; k_part < params->nparts; ++k_part) {
+    /*for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
         FILE *newMat;
         char *last = strrchr(params->filename, '/');
@@ -356,7 +355,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }
+    }*/
     /*FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
