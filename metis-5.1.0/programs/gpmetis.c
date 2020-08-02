@@ -186,7 +186,7 @@ int main(int argc, char *argv[]) {
     /// end shuffle /////
 
     /***** Randomize Matrix ******/
-    /*idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
+    idx_t *random_vartex = imalloc(graph->nvtxs, "main: part");
     idx_t row = sqrt(params->nparts);
     idx_t col = row;
     for(u=0; u<graph->nvtxs; ++u){
@@ -234,7 +234,7 @@ int main(int argc, char *argv[]) {
                 char *s = last+1;
                 char *ptr = strtok(s, ".");
                 char mat_filename[MAXLINE];
-                sprintf(mat_filename, "graphs/output/%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, (_part+cl));
+                sprintf(mat_filename, "random2d/%s_random_%"PRIDX"_%"PRIDX, ptr, params->nparts, (_part+cl));
                 
                 if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
                     fprintf(stderr, "fopen: failed to open file '%s'", ptr);
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]) {
             start = i + 1;
             _part += col;
         }
-    }*/
+    }
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
     idx_t new_id = 0, itr = 0;
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
 
 
     /// Convert graph into matrix in a sorting order of partition
-    FILE *newMat;
+    /*FILE *newMat;
     char *last = strrchr(params->filename, '/');
     char *s = last+1;
     char *ptr = strtok(s, ".");
@@ -322,7 +322,7 @@ int main(int argc, char *argv[]) {
     if (fclose(newMat) != 0) {
         fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
         exit(EXIT_FAILURE);
-    }
+    }*/
 
     /// Convert graph into matrix into multiple sorting order of partition
     /*for (k_part = 0; k_part < params->nparts; ++k_part) {
