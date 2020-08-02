@@ -270,7 +270,7 @@ int main(int argc, char *argv[]) {
     }
     /******* End ******/
     /***** Label the vertices with the new ID according to the partition *****/
-    idx_t new_id = 0, itr = 0;
+    /*idx_t new_id = 0, itr = 0;
     idx_t * new_ids;
     idx_t * sorted_vartex;
     new_ids = imalloc(graph->nvtxs, "main: part");
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
         nVartex_part[k_part] = nVartex;
         nEdges_part[k_part] = nEdgesx;
     }
-
+*/
 
     /// Convert graph into matrix in a sorting order of partition
     /*FILE *newMat;
