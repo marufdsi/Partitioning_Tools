@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     gk_startcputimer(params->iotimer);
     graph = ReadGraph(params);
 //    printf("Read the matrix for %s\n", params->filename);
-    graph = ReadMatrix(params);
+//    graph = ReadMatrix(params);
     ReadTPwgts(params, graph->ncon);
     gk_stopcputimer(params->iotimer);
 
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
 
 
     /// Convert graph into matrix in a sorting order of partition
-    FILE *newMat;
+    /*FILE *newMat;
     char *last = strrchr(params->filename, '/');
     char *s = last+1;
     char *ptr = strtok(s, ".");
@@ -323,10 +323,10 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
         exit(EXIT_FAILURE);
     }
-
+*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    /*for (k_part = 0; k_part < params->nparts; ++k_part) {
+    for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
         FILE *newMat;
         char *last = strrchr(params->filename, '/');
@@ -334,7 +334,7 @@ int main(int argc, char *argv[]) {
         char *ptr = strtok(s, ".");
         char outFile[MAXLINE];
         char mat_filename[MAXLINE];
-        sprintf(mat_filename, "graphs/partition/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
+        sprintf(mat_filename, "kway/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
         if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
             fprintf(stderr, "fopen: failed to open file '%s'", ptr);
             exit(EXIT_FAILURE);
@@ -356,7 +356,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
             exit(EXIT_FAILURE);
         }
-    }*/
+    }
     /*FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
