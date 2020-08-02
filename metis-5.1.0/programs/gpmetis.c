@@ -309,7 +309,6 @@ int main(int argc, char *argv[]) {
     fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
     fprintf(newMat, "%d %d %d\n", graph->nvtxs, graph->nvtxs, graph->nedges);
     for (k_part = 0; k_part < params->nparts; ++k_part) {
-
         for (itr = 0; itr < graph->nvtxs; ++itr) {
             u = sorted_vartex[itr];
             if (part[u] != k_part)
@@ -318,12 +317,11 @@ int main(int argc, char *argv[]) {
                 fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1), (double) graph->adjwgt[v]);
             }
         }
-
-        // close file
-        if (fclose(newMat) != 0) {
-            fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
-            exit(EXIT_FAILURE);
-        }
+    }
+    // close file
+    if (fclose(newMat) != 0) {
+        fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
+        exit(EXIT_FAILURE);
     }
 
 
