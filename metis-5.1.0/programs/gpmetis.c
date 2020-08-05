@@ -324,35 +324,42 @@ int main(int argc, char *argv[]) {
     }*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    for (k_part = 0; k_part < params->nparts; ++k_part) {
+    int off = 1;
+    if(off == 0) {
+        for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
-        FILE *newMat;
-        char *last = strrchr(params->filename, '/');
-        char *s = last+1;
-        char *ptr = strtok(s, ".");
-        char outFile[MAXLINE];
-        char mat_filename[MAXLINE];
-        sprintf(mat_filename, "kway/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
-        if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
-            fprintf(stderr, "fopen: failed to open file '%s'", ptr);
-            exit(EXIT_FAILURE);
-        }
-        fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
-        fprintf(newMat, "%d %d %d\n", nVartex_part[k_part], graph->nvtxs, nEdges_part[k_part]);
-
-        for (itr = 0; itr < graph->nvtxs; ++itr) {
-            u = sorted_vartex[itr];
-            if (part[u] != k_part)
-                continue;
-            for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
-                fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1), (double) graph->adjwgt[v]);
+            FILE *newMat;
+            char *last = strrchr(params->filename, '/');
+            char *s = last + 1;
+            char *ptr = strtok(s, ".");
+            char outFile[MAXLINE];
+            char mat_filename[MAXLINE];
+            sprintf(mat_filename, "kway/%s_%"
+            PRIDX
+            "_%"
+            PRIDX, ptr, params->nparts, k_part);
+            if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
+                fprintf(stderr, "fopen: failed to open file '%s'", ptr);
+                exit(EXIT_FAILURE);
             }
-        }
+            fprintf(newMat, "%%%MatrixMarket matrix coordinate real general\n");
+            fprintf(newMat, "%d %d %d\n", nVartex_part[k_part], graph->nvtxs, nEdges_part[k_part]);
 
-        // close file
-        if (fclose(newMat) != 0) {
-            fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
-            exit(EXIT_FAILURE);
+            for (itr = 0; itr < graph->nvtxs; ++itr) {
+                u = sorted_vartex[itr];
+                if (part[u] != k_part)
+                    continue;
+                for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
+                    fprintf(newMat, "%d %d %lf\n", (new_ids[u] + 1), (new_ids[graph->adjncy[v]] + 1),
+                            (double) graph->adjwgt[v]);
+                }
+            }
+
+            // close file
+            if (fclose(newMat) != 0) {
+                fprintf(stderr, "fopen: failed to open file '%s'", mat_filename);
+                exit(EXIT_FAILURE);
+            }
         }
     }
     /*FILE *nonSortMat;
