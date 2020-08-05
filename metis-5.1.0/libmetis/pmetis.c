@@ -230,18 +230,20 @@ idx_t MultilevelBisect(ctrl_t *ctrl, graph_t *graph, real_t *tpwgts)
 
   if (ctrl->ncuts > 1)
     bestwhere = iwspacemalloc(ctrl, graph->nvtxs);
-printf("ctrl->ncuts %d\n", ctrl->ncuts);
+printf("ctrl->ncuts %d, graph->nvtxs %d\n", ctrl->ncuts, graph->nvtxs);
   for (i=0; i<ctrl->ncuts; i++) {
+    printf("CoarsenGraph in bisect start \n");
     cgraph = CoarsenGraph(ctrl, graph);
-
+    printf("CoarsenGraph in bisect done \n");
     niparts = (cgraph->nvtxs <= ctrl->CoarsenTo ? SMALLNIPARTS : LARGENIPARTS);
     Init2WayPartition(ctrl, cgraph, tpwgts, niparts);
-
+    printf("Init2WayPartition in bisect done \n");
     Refine2Way(ctrl, graph, cgraph, tpwgts);
+    printf("Refine2Way in bisect done \n");
 
     curobj = graph->mincut;
     curbal = ComputeLoadImbalanceDiff(graph, 2, ctrl->pijbm, ctrl->ubfactors);
-
+    printf("ComputeLoadImbalanceDiff in bisect done \n");
     if (i == 0  
         || (curbal <= 0.0005 && bestobj > curobj) 
         || (bestbal > 0.0005 && curbal < bestbal)) {
