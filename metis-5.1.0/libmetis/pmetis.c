@@ -230,7 +230,7 @@ idx_t MultilevelBisect(ctrl_t *ctrl, graph_t *graph, real_t *tpwgts)
 
   if (ctrl->ncuts > 1)
     bestwhere = iwspacemalloc(ctrl, graph->nvtxs);
-
+printf("ctrl->ncuts %d\n", ctrl->ncuts);
   for (i=0; i<ctrl->ncuts; i++) {
     cgraph = CoarsenGraph(ctrl, graph);
 
@@ -257,7 +257,7 @@ idx_t MultilevelBisect(ctrl_t *ctrl, graph_t *graph, real_t *tpwgts)
     if (i < ctrl->ncuts-1)
       FreeRData(graph);
   }
-
+  printf("MultilevelBisect done \n");
   if (bestobj != curobj) {
     icopy(graph->nvtxs, bestwhere, graph->where);
     Compute2WayPartitionParams(ctrl, graph);
