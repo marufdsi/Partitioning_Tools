@@ -247,17 +247,22 @@ printf("ctrl->ncuts %d, graph->nvtxs %d\n", ctrl->ncuts, graph->nvtxs);
     if (i == 0  
         || (curbal <= 0.0005 && bestobj > curobj) 
         || (bestbal > 0.0005 && curbal < bestbal)) {
+      printf("balance condition fulfill\n");
       bestobj = curobj;
       bestbal = curbal;
       if (i < ctrl->ncuts-1)
         icopy(graph->nvtxs, graph->where, bestwhere);
+      printf("balance condition done \n");
     }
 
     if (bestobj == 0)
       break;
 
-    if (i < ctrl->ncuts-1)
+    if (i < ctrl->ncuts-1) {
+      printf("free data start\n");
       FreeRData(graph);
+      printf("free data done\n");
+    }
   }
   printf("MultilevelBisect done \n");
   if (bestobj != curobj) {
