@@ -172,12 +172,15 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
      target partition weights */
   WCOREPUSH;
   tpwgts2 = rwspacemalloc(ctrl, 2*ncon);
+  printf("tpwgts2 setup \n");
   for (i=0; i<ncon; i++) {
     tpwgts2[i]      = rsum((nparts>>1), tpwgts+i, ncon);
     tpwgts2[ncon+i] = 1.0 - tpwgts2[i];
   }
+  printf("MultilevelBisect start \n");
   /* perform the bisection */
   objval = MultilevelBisect(ctrl, graph, tpwgts2);
+  printf("MultilevelBisect done \n");
   WCOREPOP;
 
   label = graph->label;
