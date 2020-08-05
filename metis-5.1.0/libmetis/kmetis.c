@@ -36,6 +36,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   /* set up the run parameters */
   ctrl = SetupCtrl(METIS_OP_KMETIS, options, *ncon, *nparts, tpwgts, ubvec);
   if (!ctrl) {
+      printf("setup ctrl failed\n");
     gk_siguntrap();
     return METIS_ERROR_INPUT;
   }
@@ -57,7 +58,9 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
   SetupKWayBalMultipliers(ctrl, graph);
   /* set various run parameters that depend on the graph */
   ctrl->CoarsenTo = gk_max((*nvtxs)/(20*gk_log2(*nparts)), 30*(*nparts));
+  printf("ctrl->CoarsenTo %d from %lf and %lf\n", ctrl->CoarsenTo, ((*nvtxs)/(20*gk_log2(*nparts))), (30*(*nparts)));
   ctrl->nIparts   = (ctrl->CoarsenTo == 30*(*nparts) ? 4 : 5);
+  printf("ctrl->nIparts %d\n", ctrl->nIparts);
   /* take care contiguity requests for disconnected graphs */
   if (ctrl->contig && !IsConnected(graph, 0)) 
     gk_errexit(SIGERR, "METIS Error: A contiguous partition is requested for a non-contiguous input graph.\n");
@@ -100,7 +103,7 @@ idx_t MlevelKWayPartitioning(ctrl_t *ctrl, graph_t *graph, idx_t *part)
   graph_t *cgraph;
   int status;
 
-
+printf("ctrl->ncuts %d\n", ctrl->ncuts);
   for (i=0; i<ctrl->ncuts; i++) {
     cgraph = CoarsenGraph(ctrl, graph);
 

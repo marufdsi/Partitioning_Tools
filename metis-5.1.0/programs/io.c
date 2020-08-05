@@ -124,9 +124,9 @@ graph_t *ReadMatrix(params_t *params){
     memset(csrRowPtrA_counter, 0, (graph->nvtxs + 1) * sizeof(idx_t));
     printf("[inside reader] ncon: %d, nvtx=%d\n", ncon, graph->nvtxs);
     adjncy = graph->adjncy = imalloc(graph->nedges, "ReadGraph: adjncy");
-//    graph->vwgt = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
+    graph->vwgt = ismalloc(ncon*graph->nvtxs, 1, "ReadGraph: vwgt");
     adjwgt = graph->adjwgt = ismalloc(graph->nedges, 1, "ReadGraph: adjwgt");
-//    graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
+    graph->vsize  = ismalloc(graph->nvtxs, 1, "ReadGraph: vsize");
 
     if (isSymmetric) {
         for (i = 0; i < nz; i++) {
