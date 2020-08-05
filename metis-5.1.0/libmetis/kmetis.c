@@ -105,6 +105,7 @@ idx_t MlevelKWayPartitioning(ctrl_t *ctrl, graph_t *graph, idx_t *part)
 
 printf("ctrl->ncuts %d\n", ctrl->ncuts);
   for (i=0; i<ctrl->ncuts; i++) {
+      printf("0");
     cgraph = CoarsenGraph(ctrl, graph);
       printf("1");
     IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->InitPartTmr));
