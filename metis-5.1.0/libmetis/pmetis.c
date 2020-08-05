@@ -125,13 +125,13 @@ int METIS_PartGraphRecursive(idx_t *nvtxs, idx_t *ncon, idx_t *xadj,
 printf("No. V: %d, graph V: %d \n", *nvtxs, graph->nvtxs);
   /* allocate workspace memory */
   AllocateWorkSpace(ctrl, graph);
-
+printf("AllocateWorkSpace done \n");
   /* start the partitioning */
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
-
+  printf("MlevelRecursiveBisection start \n");
   *objval = MlevelRecursiveBisection(ctrl, graph, *nparts, part, ctrl->tpwgts, 0);
-
+  printf("MlevelRecursiveBisection done \n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
 
