@@ -285,6 +285,8 @@ int main(int argc, char *argv[]) {
                 sorted_vartex[new_id] = u;
                 new_ids[u] = new_id++;
                 nVartex++;
+                if((graph->xadj[u + 1] - graph->xadj[u]) <= 0)
+                    printf("No out going edges for %d\n", new_id);
                 for (v = graph->xadj[u]; v < graph->xadj[u + 1]; v++) {
                     nEdgesx++;
                 }
@@ -324,7 +326,7 @@ int main(int argc, char *argv[]) {
     }*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    int off = 1;
+    int off = 0;
     if(off == 0) {
         for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
