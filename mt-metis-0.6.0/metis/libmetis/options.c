@@ -96,11 +96,11 @@ ctrl_t *SetupCtrl(moptype_et optype, idx_t *options, idx_t ncon, idx_t nparts,
       printf("METIS_OP_OMETIS\n");
     ctrl->tpwgts = rsmalloc((nparts+2)*ncon, 0.0, "SetupCtrl: ctrl->tpwgts");
     if (tpwgts) {
-        printf("tpwgts found\n");
+//        printf("tpwgts found\n");
       rcopy(nparts*ncon, tpwgts, ctrl->tpwgts);
     }
     else {
-        printf("tpwgts not found\n");
+//        printf("tpwgts not found\n");
       for (i=0; i<nparts; i++) {
         for (j=0; j<ncon; j++)
           ctrl->tpwgts[i*ncon+j] = 1.0/nparts;

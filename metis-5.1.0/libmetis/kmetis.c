@@ -20,7 +20,7 @@ int METIS_PartGraphKway(idx_t *nvtxs, idx_t *ncon, idx_t *xadj, idx_t *adjncy,
           real_t *tpwgts, real_t *ubvec, idx_t *options, idx_t *objval, 
           idx_t *part)
 {
-    printf("Start k way partition\n");
+//    printf("Start k way partition\n");
   int sigrval=0, renumber=0;
   graph_t *graph;
   ctrl_t *ctrl;
@@ -103,30 +103,30 @@ idx_t MlevelKWayPartitioning(ctrl_t *ctrl, graph_t *graph, idx_t *part)
   graph_t *cgraph;
   int status;
 
-printf("ctrl->ncuts %d\n", ctrl->ncuts);
+//printf("ctrl->ncuts %d\n", ctrl->ncuts);
   for (i=0; i<ctrl->ncuts; i++) {
-      printf("0\n");
+//      printf("0\n");
     cgraph = CoarsenGraph(ctrl, graph);
-      printf("1\n");
+//      printf("1\n");
     IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->InitPartTmr));
     AllocateKWayPartitionMemory(ctrl, cgraph);
-printf("2\n");
+//printf("2\n");
     /* Release the work space */
     FreeWorkSpace(ctrl);
-      printf("3\n");
+//      printf("3\n");
     /* Compute the initial partitioning */
     InitKWayPartitioning(ctrl, cgraph);
-      printf("4\n");
+//      printf("4\n");
     /* Re-allocate the work space */
     AllocateWorkSpace(ctrl, graph);
     AllocateRefinementWorkSpace(ctrl, 2*cgraph->nedges);
-      printf("5\n");
+//      printf("5\n");
     IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->InitPartTmr));
     IFSET(ctrl->dbglvl, METIS_DBG_IPART, 
         printf("Initial %"PRIDX"-way partitioning cut: %"PRIDX"\n", ctrl->nparts, objval));
-      printf("6\n");
+//      printf("6\n");
     RefineKWay(ctrl, graph, cgraph);
-      printf("7\n");
+//      printf("7\n");
     switch (ctrl->objtype) {
       case METIS_OBJTYPE_CUT:
         curobj = graph->mincut;
@@ -139,9 +139,9 @@ printf("2\n");
       default:
         gk_errexit(SIGERR, "Unknown objtype: %d\n", ctrl->objtype);
     }
-      printf("8\n");
+//      printf("8\n");
     curbal = ComputeLoadImbalanceDiff(graph, ctrl->nparts, ctrl->pijbm, ctrl->ubfactors);
-      printf("9\n");
+//      printf("9\n");
     if (i == 0 
         || (curbal <= 0.0005 && bestobj > curobj)
         || (bestbal > 0.0005 && curbal < bestbal)) {
@@ -149,15 +149,15 @@ printf("2\n");
       bestobj = curobj;
       bestbal = curbal;
     }
-      printf("10\n");
+//      printf("10\n");
     FreeRData(graph);
-      printf("11\n");
+//      printf("11\n");
     if (bestobj == 0)
       break;
   }
-    printf("12\n");
+//    printf("12\n");
   FreeGraph(&graph);
-    printf("13\n");
+//    printf("13\n");
   return bestobj;
 }
 

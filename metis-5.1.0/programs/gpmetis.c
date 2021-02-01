@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
     }*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    int off = 1;
+    int off = 0;
     if(off == 0) {
         for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
@@ -336,10 +336,7 @@ int main(int argc, char *argv[]) {
             char *ptr = strtok(s, ".");
             char outFile[MAXLINE];
             char mat_filename[MAXLINE];
-            sprintf(mat_filename, "kway/%s_%"
-            PRIDX
-            "_%"
-            PRIDX, ptr, params->nparts, k_part);
+            sprintf(mat_filename, "kway/%s_%"PRIDX"_%"PRIDX, ptr, params->nparts, k_part);
             if (!(newMat = fopen(strcat(mat_filename, ".mtx"), "w"))) {
                 fprintf(stderr, "fopen: failed to open file '%s'", ptr);
                 exit(EXIT_FAILURE);

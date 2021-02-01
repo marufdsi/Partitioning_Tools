@@ -122,16 +122,16 @@ int METIS_PartGraphRecursive(idx_t *nvtxs, idx_t *ncon, idx_t *xadj,
 
   /* set up the graph */
   graph = SetupGraph(ctrl, *nvtxs, *ncon, xadj, adjncy, vwgt, vsize, adjwgt);
-printf("No. V: %d, graph V: %d \n", *nvtxs, graph->nvtxs);
+//printf("No. V: %d, graph V: %d \n", *nvtxs, graph->nvtxs);
   /* allocate workspace memory */
   AllocateWorkSpace(ctrl, graph);
-printf("AllocateWorkSpace done \n");
+//printf("AllocateWorkSpace done \n");
   /* start the partitioning */
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, InitTimers(ctrl));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_startcputimer(ctrl->TotalTmr));
-  printf("MlevelRecursiveBisection start \n");
+//  printf("MlevelRecursiveBisection start \n");
   *objval = MlevelRecursiveBisection(ctrl, graph, *nparts, part, ctrl->tpwgts, 0);
-  printf("MlevelRecursiveBisection done \n");
+//  printf("MlevelRecursiveBisection done \n");
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, gk_stopcputimer(ctrl->TotalTmr));
   IFSET(ctrl->dbglvl, METIS_DBG_TIME, PrintTimers(ctrl));
 
@@ -172,15 +172,15 @@ idx_t MlevelRecursiveBisection(ctrl_t *ctrl, graph_t *graph, idx_t nparts,
      target partition weights */
   WCOREPUSH;
   tpwgts2 = rwspacemalloc(ctrl, 2*ncon);
-  printf("tpwgts2 setup \n");
+//  printf("tpwgts2 setup \n");
   for (i=0; i<ncon; i++) {
     tpwgts2[i]      = rsum((nparts>>1), tpwgts+i, ncon);
     tpwgts2[ncon+i] = 1.0 - tpwgts2[i];
   }
-  printf("MultilevelBisect start \n");
+//  printf("MultilevelBisect start \n");
   /* perform the bisection */
   objval = MultilevelBisect(ctrl, graph, tpwgts2);
-  printf("MultilevelBisect done \n");
+//  printf("MultilevelBisect done \n");
   WCOREPOP;
 
   label = graph->label;
@@ -230,41 +230,41 @@ idx_t MultilevelBisect(ctrl_t *ctrl, graph_t *graph, real_t *tpwgts)
 
   if (ctrl->ncuts > 1)
     bestwhere = iwspacemalloc(ctrl, graph->nvtxs);
-printf("ctrl->ncuts %d, graph->nvtxs %d\n", ctrl->ncuts, graph->nvtxs);
+//printf("ctrl->ncuts %d, graph->nvtxs %d\n", ctrl->ncuts, graph->nvtxs);
   for (i=0; i<ctrl->ncuts; i++) {
-    printf("CoarsenGraph in bisect start \n");
+//    printf("CoarsenGraph in bisect start \n");
     cgraph = CoarsenGraph(ctrl, graph);
-    printf("CoarsenGraph in bisect done \n");
+//    printf("CoarsenGraph in bisect done \n");
     niparts = (cgraph->nvtxs <= ctrl->CoarsenTo ? SMALLNIPARTS : LARGENIPARTS);
     Init2WayPartition(ctrl, cgraph, tpwgts, niparts);
-    printf("Init2WayPartition in bisect done \n");
+//    printf("Init2WayPartition in bisect done \n");
     Refine2Way(ctrl, graph, cgraph, tpwgts);
-    printf("Refine2Way in bisect done \n");
+//    printf("Refine2Way in bisect done \n");
 
     curobj = graph->mincut;
     curbal = ComputeLoadImbalanceDiff(graph, 2, ctrl->pijbm, ctrl->ubfactors);
-    printf("ComputeLoadImbalanceDiff in bisect done \n");
+//    printf("ComputeLoadImbalanceDiff in bisect done \n");
     if (i == 0  
         || (curbal <= 0.0005 && bestobj > curobj) 
         || (bestbal > 0.0005 && curbal < bestbal)) {
-      printf("balance condition fulfill\n");
+//      printf("balance condition fulfill\n");
       bestobj = curobj;
       bestbal = curbal;
       if (i < ctrl->ncuts-1)
         icopy(graph->nvtxs, graph->where, bestwhere);
-      printf("balance condition done \n");
+//      printf("balance condition done \n");
     }
 
     if (bestobj == 0)
       break;
 
     if (i < ctrl->ncuts-1) {
-      printf("free data start\n");
+//      printf("free data start\n");
       FreeRData(graph);
-      printf("free data done\n");
+//      printf("free data done\n");
     }
   }
-  printf("MultilevelBisect done \n");
+//  printf("MultilevelBisect done \n");
   if (bestobj != curobj) {
     icopy(graph->nvtxs, bestwhere, graph->where);
     Compute2WayPartitionParams(ctrl, graph);
