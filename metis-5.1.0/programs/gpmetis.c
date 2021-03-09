@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
     }*/
 
     /// Convert graph into matrix into multiple sorting order of partition
-    int off = 1;
+    /*int off = 1;
     if(off == 0) {
         for (k_part = 0; k_part < params->nparts; ++k_part) {
 ///         open file
@@ -360,7 +360,7 @@ int main(int argc, char *argv[]) {
                 exit(EXIT_FAILURE);
             }
         }
-    }
+    }*/
     /*FILE *nonSortMat;
 
     char *nonsort_ptr = strtok(params->filename, ".");
